@@ -1,0 +1,638 @@
+		@font-face {
+			font-family: 'Munro';
+			src: url('resources/Munro.ttf');
+		}
+		body {
+			background: #040025;
+			font-family: 'Munro';
+			color: lightgray;
+		}
+		img {
+			image-rendering: optimizeSpeed;
+			image-rendering: -moz-crisp-edges;
+			image-rendering: -o-crisp-edges;
+			image-rendering: -webkit-optimize-contrast;
+			image-rendering: pixelated;
+			-ms-interpolation-mode: nearest-neighbor;
+		}
+		input {
+			image-rendering: optimizeSpeed;
+			image-rendering: -moz-crisp-edges;
+			image-rendering: -o-crisp-edges;
+			image-rendering: -webkit-optimize-contrast;
+			image-rendering: pixelated;
+			-ms-interpolation-mode: nearest-neighbor;
+		}
+		select {
+			font-family: 'Munro';
+			font-size: 11pt;
+		}
+		ul {
+			list-style-type: none;
+			padding-left: 0px;
+		}
+		h1 {
+			font-size: 20px;
+			text-align: center;
+		}
+		button {
+			font-family: 'Munro';
+			font-size: 12pt;
+		}
+
+/*Dropdown menu look*/
+		.select-style {
+			border: 1px solid #ccc;
+			width: 90px;
+			overflow: hidden;
+			background: #fafafa url("resources/icon-select.png") no-repeat 98% 50%;
+		}
+		.select-style select {
+			padding: 5px 8px;
+			width: 130%;
+			border: none;
+			box-shadow: none;
+			background: transparent;
+			background-image: none;
+			-webkit-appearance: none;
+		}
+		.select-style select:focus {
+			outline: none;
+		}
+		.select-selected:after {
+			position: absolute;
+			content: "";
+			top: 14px;
+			width: 0;
+			height: 0;
+			border: 6px solid transparent;
+			border-color: #fff transparent transparent transparent;
+		}
+
+		.wrapper {
+			width: 450px;
+		}
+		.enemyWrapper {
+			text-align: center;
+			margin-left: auto;
+			margin-right: auto;
+			width: 80%;
+		}
+
+		#screen {
+			width: 80%;
+			margin-right: auto;
+			margin-left: auto;
+		}
+/*
+		@media screen and (min-width:500px) {
+			#screen {
+  				width: 500px;
+  			}
+		}
+*/
+		#background {
+			min-height: 750px;
+			width: 100%;
+			z-index: 0;
+			margin-left: 0;
+			margin-right: 0;
+		}
+		
+
+		/* Monsters */
+		#monster {
+			position: absolute;
+			z-index: 1;
+			width: 20%;
+			min-width: 225px;
+			top: 65px;
+		}
+		#monsterText {
+			position: absolute;
+			z-index: 1;
+			top: 10px;
+			margin-left: 190px;
+		}
+		#monsterLevel {
+			position: absolute;
+			z-index: 1;
+			top: 27px;
+			margin-left: 220px;
+		}
+		#monsterHP {
+			position: absolute;
+			z-index: 1;
+			top: 10px;
+			margin-left: 220px;
+		}
+		#monsterSelection {
+			position: absolute;
+			top: 20px;
+			margin-left: 40px;
+			display: inline;
+		}
+		#monsterSelection div {
+			float: left;
+		}
+		#threatIcon {
+			width: 32px;
+			float: right;
+			margin-left: 0px;
+		}
+
+		/* Character and Stats */
+		#classSelection {
+			position: absolute;
+			top: 440px;
+			margin-left: 40px;
+		}
+		#classIcon {
+			position: absolute;
+			z-index: 1;
+			width: 112px;
+			margin-left: 40px;
+			top: 500px;
+		}
+		#levelWrapper1 {
+			position: absolute;
+			z-index: 1;
+			margin-left: 35px;
+			top: 450px;
+		}
+		#levelWrapper1 p {
+			margin: 5px;
+		}
+		#levelWrapper2 {
+			position: absolute;
+			z-index: 1;
+			margin-left: 60px;
+			top: 450px;
+			width: 200px;
+		}
+		#levelWrapper2 p {
+			margin: 5px;
+		}
+		#equipped {
+			position: absolute;
+			z-index: 1;
+			top: 435px;
+			margin-left: 200px;
+		}
+
+		#statList {
+			position: absolute;
+			z-index: 1;
+			top: 600px;
+		}
+		.statAmount {
+			text-align: right;
+			float: right;
+		}
+		#statName {
+			float: left; 
+			padding-right: 10px;
+			margin-left: 40px;
+		}
+		#xpNow {
+			width: 50px;
+		}
+		#money {
+			margin-bottom: 10px;
+			float: right;
+		}
+				/*Game Actions*/
+		#actionSpan {
+			position: absolute;
+			top: 370px;
+			width: 80%;
+			margin-left: auto;
+			margin-right: auto;
+			text-align: center;
+		}
+		#actionSpan button {
+			background-color: #D1A677;
+			margin-left: 4px;
+			opacity: .9;
+			cursor: pointer;
+			border: 6px, solid, #A5835E;
+			height: 46px;
+			z-index: 1;
+			overflow-wrap: normal;
+			display: none;
+		}
+		#actionSpan button:hover {
+			opacity:1;
+		}
+		#actionSpan button:active {
+			opacity:1;
+			border-style: outset;
+		}
+
+		#merchantButton {
+			position: absolute;
+			top:660px;
+			margin-left: 190px;
+			opacity:.9;
+		}
+		#merchantButton:hover {
+
+			opacity: 1;
+		}
+		#merchantView {
+			position: absolute;
+			width: 0px;
+			height: 400px;
+			top: 450px;
+			margin-left: 20px;
+			z-index: 5;
+			background-color: black;
+			padding: 5px;
+			color: white;
+			opacity: 0;
+			overflow: hidden;
+		}
+		#merchantView img {
+			width: 64px;
+		}
+		#merchantView span {
+			margin-right: 120px;
+		}
+		#merchantView button {
+			border: none;
+			margin-left: 0px;
+			margin-bottom: 2px;
+			width: 100%;
+			min-height: 30px;
+			font-family: 'Munro';
+			font-size: 10pt;
+			background-color: dimgray;
+			text-align: center;
+			color: #383838;
+		}
+		#merchantView b {
+			color: black;
+		}
+		#closeMerchant {
+			float: right;
+			width: 16px;
+		}
+		#merchantView div {
+			background-color: gray;
+			width: 120px;
+			height: 200px;
+		}
+		#sell {
+			margin-left: 100px;
+			overflow: scroll;
+			padding: 10px;
+			float: left;
+		}
+		#sell button:hover {
+			border: 1px solid white;
+		}
+		#buy {
+			margin-left: 250px;
+			overflow: scroll;
+			padding: 10px;
+		}
+		#buy button:hover {
+			border: 1px solid white;
+		}
+		#value {
+			margin-left: 150px;
+		}
+		#cookButton {
+			position: absolute;
+			top:660px;
+			margin-left: 285px;
+			opacity:.9;
+		}
+		#cookButton:hover {
+
+			opacity: 1;
+		}
+		#cookScrn {
+			visibility: hidden;
+			position: absolute;
+			width: 150px;
+			top: 500px;
+			margin-left: 230px;
+			z-index: 3;
+			background-color: gray;
+			text-align: center;
+		}
+		#cookScrn button {
+			border: none;
+			margin:5px;
+			width: 100px;
+			height: 30px;
+			font-family: 'Munro';
+			font-size: 10pt;
+			background-color: #2D2C2A;
+			color: white;
+			text-align: center;
+		}
+		#cookables button {
+			border: none;
+			margin-left: 0px;
+			margin-bottom: 2px;
+			width: 125px;
+			height: 30px;
+			font-family: 'Munro';
+			font-size: 10pt;
+			background-color: #BABABA;
+			text-align: center;
+		}
+		#cookScrn button:hover {
+			border: 2px solid white;
+		}
+		#cookables button:visited {
+			border: 2px solid red;
+		}
+		#cookables {
+			
+			height: 160px;
+			overflow: scroll;
+			background-color: dimgray;
+		}
+		#cat {
+			pointer-events: none;
+			position: absolute;
+			top: -128px;
+			margin-left: -188px;
+		}
+
+		/*Moves*/
+		#moveset {
+			position: absolute;
+			width: 120px;
+			height: 130px;
+			margin-left: 310px;
+			top: 520px;
+			background: dimgray;
+			text-align: center;
+			overflow: scroll;
+		}
+		#moveset label{
+			width: 110px;
+			padding: 5px;
+			text-align: center;
+			color: white;	
+		}
+		#moveset button {
+			border: none;
+			margin-left: 0px;
+			margin-bottom: 2px;
+			width: 110px;
+			min-height: 30px;
+			font-family: 'Munro';
+			font-size: 10pt;
+			background-color: lightgray;
+			text-align: center;
+			color: #383838;
+		}
+		#moveset button:hover {
+			opacity: .8;
+		}
+		#moveset b {
+			color: black;
+		}
+
+		/*Inventory*/
+		#inventory {
+			position: absolute;
+			width: 120px;
+			height: 130px;
+			margin-left: 175px;
+			top: 520px;
+			background: dimgray;
+			overflow: scroll;
+			text-align: center;
+		}
+		#inventory label{
+			width: 110px;
+			padding: 5px;
+			text-align: center;
+			color: white;	
+		}
+		#inventory button {
+			border: none;
+			margin-left: 0px;
+			margin-bottom: 2px;
+			width: 110px;
+			min-height: 30px;
+			font-family: 'Munro';
+			font-size: 10pt;
+			background-color: lightgray;
+			text-align: center;
+			color: #383838;
+		}
+		#inventory button:hover {
+			opacity: .8;
+		}
+		#inventory b {
+			color: black;
+		}
+
+		/*Load and save*/
+		#saveWrapper {
+			position: absolute;
+			width: 310px;
+			height: 40px;
+			z-index: 1;
+			top: 710px;
+			margin-left: 125px;
+			display: inline;
+		}
+		#saveWrapper input {
+			border: 2px solid #BABABA;
+		}
+		#saveWrapper input:hover {
+			border-color: white;
+		}
+		#checkButton {
+			height: 40px;
+		}
+		#saveButton {
+			height: 40px;
+			float: right;
+		}
+		#loadButton {
+			width: 90px;
+		}
+
+		/*Game info*/
+		#gameText {
+			width:300px;
+			position: absolute;
+			z-index: 1;
+			top: 290px;
+			margin-left: 55px;
+			overflow-wrap: normal;
+			color: lightgray;
+		}
+		#gameText b {
+			color: orange;
+		}
+		#gameScreen {
+			visibility: hidden;
+			background-color: black;
+		}
+		#startScreen {
+			position: absolute;
+			margin-left: auto;
+			margin-right: auto;
+			top: 0;
+			min-height: 750px;
+			height: 100%;
+			width: 80%;
+			background-color: black;
+			z-index: 6;
+			color: white;
+			font-size: 20px;
+			text-align: center;
+		}
+		#startScreen input {
+			height: 32px;
+			border: 2px solid black;
+		}
+		#startScreen input:hover {
+			border-color: yellow;
+		}
+		#startScreen img {
+			height: 300px;
+		}
+
+		#classSelectScreen {
+			position: absolute;
+			margin-left: auto;
+			margin-right: auto;
+			visibility: hidden;
+			top: 0;
+			min-height: 750px;
+			width: 80%;
+			height: 100%;
+			background-color: black;
+			color: white;
+			font-size: 20px;
+			
+		}
+		#classSelectScreen h1 {
+			text-align: center;
+			color: #AB9B96;
+		}
+		#classSelectScreen input {
+			background-color: white;
+			border: 2px solid black;
+		}
+		#classSelectScreen input:hover {
+			border-color: white;
+		}
+		#classInfo {
+			padding-left: 10px;
+			font-size: 12pt;
+		}
+		#classInfo label {
+			margin-left: 3%;
+			color: #AB9B96;
+		}
+		#classInfo p {
+			margin-left: 7%;
+			height: 150px;
+		}
+		#classStats {
+			position: absolute;
+			top: 100px;
+			margin-left: 65%;
+		}
+		#classStats label {
+			color: #AB9B96;
+			font-size: 12pt;
+		}
+		#classSelectList {
+			min-width: 350px;
+			width: 65%; 
+			margin-left: auto;
+			margin-right: auto;
+			text-align: center;
+		}
+		#classDescrip {
+			min-width: 200px;
+			width: 45%;
+		}
+		#attributes {
+			min-width: 200px;
+			width: 45%;
+		}
+		#statImg {
+			min-width: 128px;
+			width: 10%;
+		}
+		#classImg {
+			min-width: 128px;
+			width: 10%;
+		}
+
+		#map {
+			opacity: 0;
+			position: absolute;
+			top: 100px;
+			margin-left: 455px;
+			width: 128px;
+			height: 128px;
+			background-color: white;
+		}
+		#mapImg {
+			width: 128px;		
+		}
+		#position {
+			position: absolute;
+			margin-left: 64px;
+			top: 64px;
+			z-index: 5;
+			background-color: white;
+		}
+
+		#cityScreen {
+			position: absolute;
+			visibility: hidden;
+			height: 480px;
+			width: 460px;
+			top: 420px;
+			background-color: black;
+			z-index: 4;
+			color: white;
+			font-size: 20px;
+			text-align: center;
+		}
+
+		#gameOver {
+			visibility: hidden;
+			position: absolute;
+			top: 0;
+			width: 80%;
+			height: 100%;
+			margin-left: auto;
+			margin-right: auto;
+			background-color: black;
+			z-index: 5;
+			color: white;
+			text-align: center;
+			font-size: 20px;
+		}
+		#gameOver p{
+			margin-top: 300px;
+		}
+		#gameOver button{
+			border: none;
+			margin-left: 0px;
+			margin-bottom: 2px;
+			width: 100px;
+			height: 28px;
+			font-family: 'Munro';
+			font-size: 10pt;
+			background-color: lightgray;
+			text-align: center;
+		}
+		

@@ -1,0 +1,251 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="utf-8">
+	<title>Add Ventures</title>
+	<link rel='stylesheet' type='text/css' href='style.css'> 
+
+	<script type="text/javascript" src="game.js"></script>
+	<script type="text/javascript" src="items.js"></script>
+	<script type="text/javascript" src="moves.js"></script>
+	<script type="text/javascript" src="phrases.js"></script>
+</head>
+
+<body id="screen" onload="titleTheme()">
+	
+
+	<div id="gameScreen">
+		<div><!-- Monster stats and text -->
+			<p id="monsterText">
+			Lvl:
+			</br>
+			HP:
+			</p>
+			<p id="monsterLevel">1</p>
+			<p id="monsterHP">1</p>
+		</div>
+		<div id="classSelection"></div>
+		<!-- Player level and XP --> 
+		<div id="levelWrapper1">
+			<p>Lvl: </p>
+			<p>XP:</p>
+		</div>
+		<div id="levelWrapper2">
+			<p id="money">Money: 0</p>
+			<p id="pLevel">1</p>
+			<p id="xpNow"></p>
+		</div>
+		<!-- stats -->
+		<div id="statList">
+			<ul id="statName">
+				<li>HP</li>
+				<li>Diplomacy</li>
+				<li>Intelligence</li>
+				<li>Speed</li>
+				<li>Strength</li>
+				<li>Defense</li>
+				<li>Dedication</li>
+				<li>Luck</li>
+			</ul>
+			<!--Player stats are generated in game.js-->
+			<ul class="statAmount" id="statDenominators">
+			</ul>
+			<ul class="statAmount" id="statSlash">
+				<li>/</li>
+				<li>/</li>
+				<li>/</li>
+				<li>/</li>
+				<li>/</li>
+				<li>/</li>
+				<li>/</li>
+				<li>/</li>
+			</ul>
+			<ul class="statAmount" id="statNumerators">
+			</ul>
+		</div>
+		<div id="equipped">
+			<label>Equipped:</label>
+		</div>
+		<img id="classIcon" src="resources/classes/chooseClass.png">
+		<p id="gameText"></p>
+		<div id="moveset">
+			<label>Moves:</label>
+		</div>
+
+		<div id="inventory">
+			<label>Inventory:</label>
+		</div>
+
+		<div><!-- buttons -->
+			<input type="image" id="merchantButton" onclick="openMerchant()" src="resources/merchant.png">
+			<input type="image" id="cookButton" onclick="openCook()" src="resources/cookButton.png">
+			<span id="actionSpan">
+				<button id="attackButton" onclick="attack()">Attack</button>
+				<button id="blockButton" onclick="defend()">Block</button>
+				<button id="actionButton" onclick="advance()">Continue</button>
+				<button id="exploreButton" onclick="explore()">Venture Deeper</button>
+			</span>
+			<span id="saveWrapper">
+				<input type="image" id="saveButton" src="resources/saveButton.png" onclick="save()">
+			</span>
+			<!--<button onclick="clearSave()">Clear Saved Data</button>-->
+			<!--continue button to advance text-->
+		</div>
+		<div id="merchantView">
+			<input type="image" id="closeMerchant" src="resources/closeMerchant.png" onclick="closeMerchant()">
+			<span>
+				<img src="resources/merchantIcon.png">
+				<label id="value">-</label>
+				<br>
+				<label>Merchant</label>
+				<br>
+				<label id="merchR">Renown: 0</label>
+				<br>
+				<label id="merchM">Money: 0</label>
+			</span>
+			<span>
+				<label>Sell:</label>
+			</span>
+			<span>
+				<label>Buy:</label>
+			</span>
+			<div id="sell"></div>
+			<div id="buy">
+				<p>-Coming Soon-</p>
+			</div>
+		</div>
+		<div id="cityScreen">
+			<input type="image" id="closeMerchant" src="resources/closeMerchant.png" onclick="exitCity()">
+			<input type="image" onclick="openMerchant()" src="resources/merchant.png">
+		</div>
+		<div id="cookScrn">
+			<label>Cooking:</label>
+			<input type="image" id="closeMerchant" src="resources/closeMerchant.png" onclick="closeCook()">
+			<img id="cat" src="resources/cat.png">
+			<div id="cookables"></div>
+			<button onclick="cook()">Cook</button>
+		</div>
+		<div id="map" style="visibility: hidden">
+			<img id="mapImg" src="resources/map.png">
+			<img id="position" src="resources/coordinate.png">
+			<select id="compass" disabled onchange="setCompass(value)">
+				<option value="" >None</option>
+				<option value="forest">Forest</option>
+				<option value="coast">Coast</option>
+				<option value="desert">Desert</option>
+				<option value="tundra">Tundra</option>
+			</select>
+		</div>
+		<div id="monsterSelection">
+			<label for="monsters">Monster:</label>
+			<br>
+			<div class="select-style">
+				<select name="monsters" id="monsterSelector" onChange="monsterSelection(value)">
+					<option value="">Select Foe</option>
+					<option value="all" disabled>--All--</option>
+						<option value="0,all">Goblin</option>
+						<option value="1,all">Man</option>
+						<option value="2,all">Triplet</option>
+						<option value="3,all">Fink</option>
+						<option value="4,all">Haas</option>
+						<option value="5,all">Punisher</option>
+						<option value="6,all">Heckler</option>
+						<option value="7,all">Hound</option>
+						<option value="8,all">Brute</option>
+						<option value="9,all">Deformed</option>
+						<option value="10,all">Mimic</option>
+						<option value="11,all">Guardian</option>
+						<option value="12,all">Miser</option>
+					<option value="forest" disabled>--Forest--</option>
+						<option value="0,forest">Behemoth</option>
+						<option value="1,forest">Warlord</option>
+						<option value="2,forest">Fungus</option>
+						<option value="3,forest">Faerie</option>
+						<option value="4,forest">Weeping Willow</option>
+						<option value="5,forest">Dwarf</option>
+						<option value="6,forest">Stag</option>
+						<option value="7,forest">Fumigator</option>
+						<option value="8,forest">Highlander</option>
+						<option value="9,forest">Asterlux</option>
+					<option value="coast" disabled>--Coast--</option>
+						<option value="0,coast">Behemoth</option>
+						<option value="1,coast">Warlord</option>
+						<option value="2,coast">Khnum</option>
+						<option value="3,coast">Minotaur</option>
+					<option value="Desert" disabled>--Desert--</option>
+						<option value="0,desert">Behemoth</option>
+						<option value="1,desert">Warlord</option>
+					<option value="Tundra" disabled>--Tundra--</option>
+						<option value="0,tundra">Behemoth</option>
+						<option value="1,tundra">Warlord</option>
+				</select>
+			</div>
+			<img src="resources/threatB.png" id="threatIcon">
+			<br>
+			<button id="randomButton" style="display: none;" onclick="getRandomMonster()">Random</button>
+			<select id="randomRegion" disabled>
+				<option value="" disabled>Region</option>
+				<option value="all">All</option>
+				<option value="forest" selected>Forest</option>
+				<option value="coast">Coast</option>
+				<option value="desert">Desert</option>
+				<option value="tundra">Tundra</option>
+			</select>
+		</div>
+	</div>
+	
+	<div id="startScreen">
+			<br>
+			<img src="resources/title.png">
+			<br>
+			<br>
+			<input type="image" src="resources/newGameButton.png" onclick="newGame()">
+			<input type="image" src="resources/loadButton.png" onclick="load()">
+	</div>
+	<!-- images -->
+	<div class="enemyWrapper">
+		<img id="monster">	
+	</div>
+		
+	<div id="classSelectScreen">
+		<br>
+		<h1>Choose Your Class:</h1>
+		<div id="classInfo">
+			<span>
+				<label>DESCRIPTION:</label>
+				<p id="classDescrip"></p>
+			</span>
+			<span>
+				<label>ATTRIBUTES:</label>
+				<p id="attributes"></p>
+			</span>
+		</div>
+		<div id="classStats">
+				<img id="classImg" src="resources/classes/chooseClass.png">
+				<br>
+				<label>STATS:</label>
+				<br>
+				<img id="statImg" src="">
+		</div>
+		<h1 id="title">-</h1>
+		<div id="classSelectList">
+			<input type="image" value="0" name="paladin" src="resources/classes/paladin.png" onmouseover="classDescription(value, name)" onclick="classSelection(name,'Paladin')">
+			<input type="image" value="1" name="historian" src="resources/classes/historian.png" onmouseover="classDescription(value, name)" onclick="classSelection(name,'Historian')">
+			<input type="image" value="2" name="ranger" src="resources/classes/ranger.png" onmouseover="classDescription(value, name)" onclick="classSelection(name,'Ranger')">
+			<input type="image" value="3" name="oaf" src="resources/classes/oaf.png" onmouseover="classDescription(value, name)" onclick="classSelection(name,'Oaf')">
+			<input type="image" value="4" name="cleric" src="resources/classes/cleric.png" onmouseover="classDescription(value, name)" onclick="classSelection(name,'Cleric')">
+			<input type="image" value="5" name="outlaw" src="resources/classes/outlaw.png" onmouseover="classDescription(value, name)" onclick="classSelection(name,'Outlaw')">
+			<input type="image" value="6" name="decrepit" src="resources/classes/decrepit.png" onmouseover="classDescription(value, name)" onclick="classSelection(name,'Decrepit')">
+			<input type="image" value="7" name="soothsayer" src="resources/classes/soothsayer.png" onmouseover="classDescription(value, name)" onclick="classSelection(name,'Soothsayer')">
+			<input type="image" value="8" name="crustacean" src="resources/classes/crustacean.png" onmouseover="classDescription(value, name)" onclick="classSelection(name,'Crustacean')">
+			<input type="image" value="9" name="mechanic" src="resources/classes/mechanic.png" onmouseover="classDescription(value, name)" onclick="classSelection(name,'Mechanic')">
+			<input type="image" value="10" name="alchemist" src="resources/classes/alchemist.png" onmouseover="classDescription(value, name)" onclick="classSelection(name,'Alchemist')">
+			<input type="image" value="11" name="nativ" src="resources/classes/nativ.png" onmouseover="classDescription(value, name)" onclick="classSelection(name,'Native')">
+		</div>
+	</div>
+	<div id="gameOver">
+		<p>Game Over, Lad</p>
+		<button onclick=location.reload()>Start Over?</button>
+	</div>
+</body>
+</html>
