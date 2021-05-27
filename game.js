@@ -74,7 +74,7 @@ var inventory = [];
 //0-name 0-statUsed 1-power Buff
 var equippedWeapon = {
 	name:"Hands", 
-	attackStat:4, 
+	attackStat:"strength", 
 	power:1, 
 	buffs:{"speed":1},
 	condition:"unlimited"
@@ -87,6 +87,17 @@ var moveSet = [
 ];
 
 var statNames = ["Health","Diplomacy","Intelligence","Speed","Strength","Defense","Dedication","Luck"];
+var statsAbbreviated = {
+	health:"hp",
+	diplomacy:"dip",
+	intelligence:"int",
+	speed:"spd",
+	strength:"str",
+	defense:"def",
+	dedication:"ded",
+	luck:"luc",
+	combo:"str/spd"
+};
 // 0-health 1-wisdom 2-diplomacy 3-perception
 // 4-strength 5-agility 6-intelligence 
 // 7-healing 8-dedication 9-luck
@@ -238,6 +249,16 @@ var stats = {
 		defense: 1,
 		dedication: 1,
 		luck: 1
+	},
+	buff: {
+		hp: 0,
+		diplomacy: 0,
+		intelligence: 0,
+		speed: 0,
+		strength: 0,
+		defense: 0,
+		dedication: 0,
+		luck: 0
 	}
 };
 var statMultipliers = {
@@ -289,12 +310,26 @@ var spawnedMonster = {
 		items: {}
 	}
 };
+
+var colorPalette = {
+	money:"#E3DC95",//E3C78F
+	dark:"#1B2021",
+	levelUp:"#FFA500",
+	combo: "#B7978A",//weapon colors
+	speed: "#8DB78F",//weapon colors
+	strength: "#8DB7C7",//weapon colors
+	standard: "#FFFFFF",//nothing special weapon
+	rare: "#9EC8FF",//blue
+	historic: "#8D7AD6",//purple 572AB0
+	legendary: "#FABEA5"//orange
+}
+
 var monsters = {
-	//0-name 1-xp1 2-weight 3-lvl 4-hp 5-str 6-agi
+	//0-name 1-xp1 2-weight 3-lvl 4-hp 5-str 6-speed
 	all:[
 	["goblin",	10, 90, 1, 1, 1, 1],
 	["man",		10, 70, 1, 2, 1, 1],
-	["triplet",	10, 60, 1, 3, 1, 1],
+	["triplet",	10, 60, 1, 3, 1, 2],
 	["fink",	10, 50, 1, 1, 1, 3],
 	["haas",	10, 40, 1, 1, 2, 4],
 	["punisher",10, 45, 1, 2, 3, 1],
@@ -308,9 +343,9 @@ var monsters = {
 	],
 	forest:[
 	["behemoth", 1, 5, 1, 7, 4, 3],
-	["warlord", 10, 10, 1, 3, 5, 8],
-	["fungus", 10, 30, 1, 3, 3, 5],
-	["faerie", 10, 50, 1, 2, 2, 8],
+	["warlord", 10, 10, 1, 3, 5, 5],
+	["fungus", 10, 30, 1, 3, 3, 3],
+	["faerie", 10, 50, 1, 2, 2, 5],
 	["weeping willow", 10, 60, 1, 4, 3, 2],
 	["dwarf", 10, 70, 1, 2, 4, 2],
 	["stag", 10, 60, 1, 4, 3, 2],
@@ -328,11 +363,11 @@ var monsters = {
 
 	desert:[
 	["behemoth", 1, 1, 1, 6, 5, 4],
-	["warlord", 10, 5, 1, 2, 7, 3]
+	["warlord", 10, 5, 1, 3, 7, 3]
 	],
 	tundra:[
-	["behemoth", 1, 90, 1, 10, 7, 1],
-	["warlord", 10, 75, 1, 5, 3, 4]
+	["behemoth", 1, 90, 1, 12, 7, 1],
+	["warlord", 10, 75, 1, 6, 3, 4]
 	]
 };
 
@@ -358,23 +393,28 @@ class Fighting { //in battle
 		} else {
 			this.setDefend();
 		};
-		document.getElementById("actionButton").innerHTML = "FLEE<br>"+this.fleeChance+"%";
+		document.getElementById("actionButton").innerHTML = "FLEE "+getIcon("speed")+"<br>"+this.fleeChance+"%";
 		document.getElementById("actionButton").style.display = "inline";
 	}
 	continue() {//flee
 		flee();
 	}
 	setAttack() {
+		if (equippedWeapon.attackStat === "combo") {
+			this.maxHit = Math.round((statNumerators.strength+statNumerators.speed)/2);
+		} else {
+			this.maxHit = statNumerators[equippedWeapon.attackStat];
+		}
 		this.attacking = true;
 		document.getElementById("blockButton").style.display = "none";
 		document.getElementById("attackButton").style.display = "inline";
-		document.getElementById("attackButton").innerHTML = "ATTACK "+statNumerators.strength+"<br>"+this.hitChance+"% Hit";
+		document.getElementById("attackButton").innerHTML = "ATTACK "+getIcon(equippedWeapon.attackStat)+" <b>"+Math.round((this.maxHit+equippedWeapon.power)/2)+"-"+(this.maxHit+equippedWeapon.power)+"</b><br>"+this.hitChance+"% Hit";
 	}
 	setDefend() {
 		this.attacking = false;
 		document.getElementById("attackButton").style.display = "none";
 		document.getElementById("blockButton").style.display = "inline";
-		document.getElementById("blockButton").innerHTML = "DEFEND "+statNumerators.defense+"<br>"+this.dodgeChance+"% Dodge";
+		document.getElementById("blockButton").innerHTML = "DEFEND "+getIcon("defense")+" "+statNumerators.defense+"<br>"+this.dodgeChance+"% Dodge";
 	}
 	attack() {
 		this.setDefend();
@@ -389,21 +429,15 @@ class Fighting { //in battle
 			};
 		} else {
 			attackSound.play();
-			let power = Math.random()+1;
-			let attackStatMap = {4:"strength",5:"speed",6:"combo"};
-			let attackStat = attackStatMap[equippedWeapon.attackStat];
-			console.log(attackStat,equippedWeapon.attackStat);
-			if (attackStat === "combo") {
-				attackStat = (statNumerators.speed+statNumerators.strength)/2;
-				power = (power * attackStat * .2)+equippedWeapon.power;
+			let power; //your power is anywhere from 50% to 100% of the attackstat of your player plus the power of the weapon
+			if (equippedWeapon.attackStat === "combo") {
+				power = this.maxHit + equippedWeapon.power;
+				power = randIntBetween(power/2, power);
 			} else {
-				power = (power * statNumerators[attackStat] * .2)+equippedWeapon.power;
+				power = this.maxHit+equippedWeapon.power;
+				power = randIntBetween(power/2, power);
 			};
-			power = Math.round(power);
-			if (power < 1) {
-				power = 1;
-			};
-			damageMonster(power);
+			damageMonster(power); //damage is your power - defense level of monster
 		};
 	}
 	defend() {
@@ -426,7 +460,7 @@ class Wilderness { //as you traverse the path
 		if (bossCount >= 1) {
 			bossCount--;
 		} else { //select boss monster
-			bossCount = Math.random() * 5 + 25;
+			bossCount = Math.random() * 15 + 35;
 			bossCount = Math.round(bossCount);
 			var i = Math.round(Math.random());
 			var index = [i, document.getElementById("randomRegion").value];
@@ -444,7 +478,7 @@ class Wilderness { //as you traverse the path
 			i = Math.round(i);
 			visit(i);
 		} else if (Math.random() >.9){
-			let type = "food";
+			let type = "weapon";//!
 			let i = Math.round(Math.random() * (gameItems[type][0].length - 1));
 			let item = Object.assign({}, gameItems[type][0][i]);
 			item.type = type;
@@ -494,8 +528,8 @@ class City { //when you're visiting a museum, library, etc
 		document.getElementById("actionButton").innerHTML = "Leave City";
 		document.getElementById("exploreButton").style.display = "inline";
 		document.getElementById("exploreButton").innerHTML = "Explore City";
-		bossCount = Math.random() * 5 + 10;
-		bossCount = Math.round(bossCount);
+		//bossCount = Math.random() * 5 + 10; //! old way of doing boss countdown. Reset when you hit the city. Now it happens every 50ish turns in the wild.
+		//bossCount = Math.round(bossCount);
 		document.getElementById("cityScreen").style.visibility = 'visible';
 
 		//Give merchant new items
@@ -635,7 +669,8 @@ function clearSave() {
 //Stats info
 function levelUp() {
 	//document.getElementById("gameText").innerHTML = "<br>Reached level <b>"+player.level+"</b>";
-	document.getElementById("gameText").innerHTML += "<br>Reached level <b>"+(player.level+1)+"</b>";
+	let lvlTxt = colorize("level "+(player.level+1), colorPalette.levelUp, true);
+	document.getElementById("gameText").innerHTML += "<br>Reached "+lvlTxt;
 	player.level = player.level + 1;
 	document.getElementById("pLevel").innerHTML = (player.level);
 	if (player.level % 10 === 0) {
@@ -653,7 +688,7 @@ function levelUp() {
 	}
 	//set Numerators for stats
 	for (const [key, value] of Object.entries(statDenominators)) {
-		statNumerators[key] = value;
+		statNumerators[key] = value + stats.buff[key];
 	}
 	updateStats();
 
@@ -728,25 +763,28 @@ function updateInventory() {
 		button.value = i;
 		if (item.type === "weapon") {
 			console.log("weapon:",item);
-			button.title = "pwr: " + item.power;
-			if (item.attackStat === 4) {
+			button.title = "pwr: " + item.power+" stat: "+statsAbbreviated[item.attackStat];
+			/*
+			if (item.attackStat === "strength") {
 				button.style.background = "#B7978A"; 
-			} else if (item.attackStat === 5){
+			} else if (item.attackStat === "speed"){
 				button.style.background = "#8DB78F"; 
 			} else {
 				button.style.background = "#8DB7C7"; 
-			};
-			button.innerHTML += "<br>Power: "+item.power;
+			};*/
+			button.style.background = colorPalette[item.rarity];
+			button.innerHTML += "<br>Power: "+item.power+" "+getIcon(item.attackStat);
 		} else if (item.type === "food") {
 			console.log("food",item)
 			if (item.spoil < 1) {
 				button.title = "Spoiled";
 				button.style.background = "#BBD7A0"; 
+				button.innerHTML += "<br>Spoiled";
 			} else {
 				button.title = "Heals: " + item.heals + " Uses: " + item.uses;
 				button.style.background = "#D7CC91"; 
+				button.innerHTML += "<br>Heals: "+item.heals+" Uses: "+item.uses;
 			};
-			button.innerHTML += "<br>Heals: "+item.heals+" Uses: "+item.uses;
 		} else if (item.type === "potion") {
 			button.style.background = "#C98FBE"; 
 			if (item[5] === "poison") {
@@ -766,6 +804,18 @@ function addItem(item) {
 	let inventoryItem = Object.assign({}, item);
 	if (inventoryItem.type === "food") {
 		inventoryItem.spoil = Math.round(Math.random()*10+5);
+	} else if (inventoryItem.type === "weapon") {
+		let attackStatMap = {4:"strength",5:"speed",6:"combo"};
+		inventoryItem.attackStat = attackStatMap[inventoryItem.attackStat];
+		//handle item rarity
+		let rarity = Math.random();
+		if (rarity > .95) {//legendary
+			inventoryItem.rarity = "legendary";
+		} else if (rarity > .85) {//historic
+			inventoryItem.rarity = "historic";
+		} else if (rarity > .65) {//rare
+			inventoryItem.rarity = "rare";
+		}
 	}
 	inventory.push(inventoryItem);
 };
@@ -843,10 +893,10 @@ function eat(i) {
 	updateStats();
 	if (inventory[i].uses <= 1) {
 		inventory.splice(i,1);
-		updateInventory();
 	} else {
 		inventory[i].uses -= 1;
 	};
+	updateInventory();
 };
 
 function equip(weapon) {
@@ -855,9 +905,22 @@ function equip(weapon) {
 		gameText("You lack the ability to equip this item.");
 		return;
 	};
+	if (gameState instanceof Fighting && gameState.attacking === true) {
+		gameState.setAttack();
+	}
 	let item = Object.assign({},inventory[weapon]);//creates shallow copy instead of a deep one
 	inventory.splice(weapon, 1);
 	
+	//remove buffs for old equip
+	for (const [key, value] of Object.entries(equippedWeapon.buffs)) {
+		statNumerators[key] -= value;
+		stats.buff[key] -= value;
+	}
+	//set buffs for new equip
+	for (const [key, value] of Object.entries(equippedWeapon.buffs)) {
+		statNumerators[key] += value;
+		stats.buff[key] += value;
+	}
 
 	if (equippedWeapon.name !== "Hands") {
 		//equippedWeapon.splice(5,1);
@@ -868,9 +931,11 @@ function equip(weapon) {
 	equippedWeapon = item;
 	//equippedWeapon.push(weapon);
 	document.getElementById("gameText").innerHTML = "You equip the " + equippedWeapon.name + ".";
+
 	equipSound.play();
 	updateInventory();
-	document.getElementById("equipped").innerHTML = "Equipped: " + equippedWeapon.name;
+	let attackStat = "("+statsAbbreviated[equippedWeapon.attackStat]+")";
+	document.getElementById("equipped").innerHTML = "Equipped: " + equippedWeapon.name+" +"+equippedWeapon.power+" "+attackStat;
 };
 
 
@@ -991,11 +1056,13 @@ function monsterDeath(gainedLevel) {
 	if (!gainedLevel) {
 		winSound.play();
 	} else {
-		document.getElementById("gameText").innerHTML += " Reached level <b>"+player.level+"</b>";
+		let lvlText = colorize("level "+player.level, colorPalette.levelUp,true);
+		document.getElementById("gameText").innerHTML += " Reached "+lvlText;
 	}
 	//Determine drop
 	player.money += spawnedMonster.reward.money;
-	document.getElementById("gameText").innerHTML += "<br>Gained "+spawnedMonster.reward.money+" gold";
+	let moneyText = colorize(spawnedMonster.reward.money+" gold", colorPalette.money, false);
+	document.getElementById("gameText").innerHTML += "<br>Gained "+moneyText;
 	for (var i = Math.random(); i >.7 ;) {
 		let item;
 		if (i > .9) {
@@ -1196,7 +1263,7 @@ function monsterSelection (selection) {
 	//monster level and stats 
 	spawnedMonster.level = Math.round((Math.random()*2+.5)*player.level);
 
-	spawnedMonster.xp1 = spawnedMonster.level*monSpawner[1];
+	spawnedMonster.defense = spawnedMonster.level*monSpawner[1];
 	spawnedMonster.hp = spawnedMonster.level*monSpawner[4];
 	spawnedMonster.strength = spawnedMonster.level*monSpawner[5];
 	spawnedMonster.speed = spawnedMonster.level*monSpawner[6];
@@ -1345,7 +1412,7 @@ function visit(location) {
 		n = Math.random() * (adj.title.length - 1);
 		n = Math.round(n);
 		text = text + " " + adj.title[n] + ". " + locations[location][2];
-	};	
+	};
 	document.getElementById("gameText").innerHTML = text;
 
 	//show picture
@@ -1710,5 +1777,15 @@ function gameText(text) {
 //Utility functions:
 
 function randIntBetween(min, max) { // min and max included 
-  return Math.floor(Math.random() * (max - min + 1) + min);
+	console.log(min,max)
+	return Math.floor(Math.random() * (max - min + 1) + min);
+}
+function colorize(text,color,bold) {
+	if (bold) {
+		text = "<b>"+text+"</b>";
+	}
+	return "<span style=\"color:"+color+"\">"+text+"</span>";
+}
+function getIcon(filename) {
+	return "<img class=\"icon\" src=\"resources/icons/"+filename+".png\">"
 }

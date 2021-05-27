@@ -78,6 +78,9 @@
 			margin-right: auto;
 			width: 80%;
 		}
+		.icon {
+			vertical-align: middle;
+		}
 
 		#screen {
 			width: 80%;
@@ -471,9 +474,6 @@
 			margin-left: 55px;
 			overflow-wrap: normal;
 			color: lightgray;
-		}
-		#gameText b {
-			color: orange;
 		}
 		#gameScreen {
 			visibility: hidden;

@@ -71,140 +71,141 @@ var gameItems = {
 	weapon: [ 
 		[//lvls 1-15
 	//Daggers
-		{name: "Shank",			level:1,	attackStat:5,	power:3,	value:4, 	buffs:[]},
-		{name: "Stone Dagger",	level:1,	attackStat:4,	power:1,	value:12, 	buffs:[]},
-		{name: "Butter Knife",	level:1,	attackStat:6,	power:2,	value:5, 	buffs:[]},
-		{name: "Rusty Dagger",	level:1,	attackStat:4,	power:7,	value:15, 	buffs:[]},
-		{name: "Smooth Tusk",	level:1,	attackStat:6,	power:11,	value:33, 	buffs:[]},
+		{name: "Shank",			level:1,	attackStat:5,	power:1,	value:4, 	buffs:{}},
+		{name: "Stone Dagger",	level:1,	attackStat:4,	power:1,	value:12, 	buffs:{}},
+		{name: "Butter Knife",	level:1,	attackStat:6,	power:1,	value:5, 	buffs:{}},
+		{name: "Rusty Dagger",	level:1,	attackStat:4,	power:1,	value:15, 	buffs:{}},
+		{name: "Smooth Tusk",	level:1,	attackStat:6,	power:2,	value:33, 	buffs:{diplomacy:1}},
 	//Swords
-		{name: "Corroded Shortsword",level:1,attackStat:6,	power:8,	value:22, 	buffs:[]},
-		{name: "Akinaka",		level:1,	attackStat:6,	power:14,	value:40, 	buffs:[]},
-		{name: "Copper Shortsword",level:1,	attackStat:6,	power:17,	value:55, 	buffs:[]},
+		{name: "Corroded Shortsword",level:1,attackStat:6,	power:2,	value:22, 	buffs:{}},
+		{name: "Akinaka",		level:1,	attackStat:6,	power:3,	value:40, 	buffs:{}},
+		{name: "Copper Shortsword",level:1,	attackStat:6,	power:3,	value:55, 	buffs:{}},
 	//Blunt
-		{name: "Club",			level:1,	attackStat:4,	power:12,	value:17, 	buffs:[]},
-		{name: "Heavy Rock",	level:1,	attackStat:4,	power:9,	value:2, 	buffs:[]},
-		{name: "Boot on Stick",	level:1,	attackStat:4,	power:15,	value:1, 	buffs:{strength:1}},//make most powerful lvl1 weapon
+		{name: "Club",			level:1,	attackStat:4,	power:4,	value:17, 	buffs:{speed:-1}},
+		{name: "Heavy Rock",	level:1,	attackStat:4,	power:3,	value:2, 	buffs:{speed:-1}},
+		{name: "Boot on Stick",	level:1,	attackStat:4,	power:15,	value:1, 	buffs:{strength:1,speed:-1}},//make most powerful lvl1 weapon
 	//Pole Weapon
-		{name: "Staff",			level:1,	attackStat:4,	power:14,	value:12, 	buffs:[]},
+		{name: "Staff",			level:1,	attackStat:4,	power:3,	value:12, 	buffs:{}},
 	//Ranged
-		{name: "Rocks",			level:1,	attackStat:5,	power:4,	value:3, 	buffs:[]},
-		{name: "Darts",			level:1,	attackStat:5,	power:13,	value:13, 	buffs:[]},
-		{name: "Crude Shortbow",level:1,	attackStat:5,	power:15,	value:40, 	buffs:[]},
+		{name: "Rocks",			level:1,	attackStat:5,	power:1,	value:3, 	buffs:{}},
+		{name: "Darts",			level:1,	attackStat:5,	power:2,	value:13, 	buffs:{}},
+		{name: "Crude Shortbow",level:1,	attackStat:5,	power:3,	value:40, 	buffs:{}},
 	//Other
-		{name: "Sharpened Potato",level:1,	attackStat:6,	power:1,	value:-1,	buffs:[]}
+		{name: "Sharpened Potato",level:1,	attackStat:6,	power:0,	value:-1,	buffs:{intelligence:-1,diplomacy:-1,luck:2}}
 		],//15
 		[ //16-30
 	//Daggers
-		{name: "Jagged Tusk",	level:2,	attackStat:4,	power:17,	value:40, 	buffs:[]},
-		{name: "Bronze Dagger",	level:2,	attackStat:6,	power:13,	value:24, 	buffs:[]},
-		{name: "Dirk",			level:2,	attackStat:5,	power:21,	value:44, 	buffs:[]}, 
+		{name: "Jagged Tusk",	level:2,	attackStat:4,	power:4,	value:40, 	buffs:{}},
+		{name: "Bronze Dagger",	level:2,	attackStat:6,	power:4,	value:24, 	buffs:{}},
+		{name: "Dirk",			level:2,	attackStat:5,	power:4,	value:44, 	buffs:{}}, 
 	//Swords
-		{name: "Broadsword",	level:2,	attackStat:4,	power:22,	value:60, 	buffs:[]},
-		{name: "Scimitar",		level:2,	attackStat:6,	power:24,	value:75, 	buffs:[]},
-		{name: "Sica",			level:2,	attackStat:4,	power:29,	value:81, 	buffs:[]},
+		{name: "Broadsword",	level:2,	attackStat:4,	power:22,	value:60, 	buffs:{}},
+		{name: "Scimitar",		level:2,	attackStat:6,	power:24,	value:75, 	buffs:{}},
+		{name: "Sica",			level:2,	attackStat:4,	power:29,	value:81, 	buffs:{}},
 	//Blunt
-		{name: "Spiked Club",	level:2,	attackStat:4,	power:28,	value:21, 	buffs:[]},
-		{name: "Flail",			level:2,	attackStat:6,	power:33,	value:33, 	buffs:[]},
-		{name: "Brass Knuckles",level:2,	attackStat:4,	power:12,	value:12, 	buffs:[]},
+		{name: "Spiked Club",	level:2,	attackStat:4,	power:28,	value:21, 	buffs:{}},
+		{name: "Flail",			level:2,	attackStat:6,	power:33,	value:33, 	buffs:{}},
+		{name: "Brass Knuckles",level:2,	attackStat:4,	power:12,	value:12, 	buffs:{}},
 	//Pole Weapon
-		{name: "Spear",			level:2,	attackStat:4,	power:30,	value:55, 	buffs:[]},
-		{name: "falx",			level:2,	attackStat:6,	power:12,	value:20, 	buffs:[]},
+		{name: "Spear",			level:2,	attackStat:4,	power:30,	value:55, 	buffs:{}},
+		{name: "falx",			level:2,	attackStat:6,	power:12,	value:20, 	buffs:{}},
 	//Ranged
-		{name: "Sling",			level:2,	attackStat:5,	power:19,	value:20, 	buffs:[]},
-		{name: "Rope Dart",		level:2,	attackStat:5,	power:29,	value:33, 	buffs:[]},
-		{name: "Blowgun",		level:2,	attackStat:5,	power:24,	value:40, 	buffs:[]},
-		{name: "Pine Shortbow",	level:2,	attackStat:5,	power:31,	value:57, 	buffs:[]},
+		{name: "Sling",			level:2,	attackStat:5,	power:19,	value:20, 	buffs:{}},
+		{name: "Rope Dart",		level:2,	attackStat:5,	power:29,	value:33, 	buffs:{}},
+		{name: "Blowgun",		level:2,	attackStat:5,	power:24,	value:40, 	buffs:{}},
+		{name: "Pine Shortbow",	level:2,	attackStat:5,	power:31,	value:57, 	buffs:{}},
 		],//15
 		[//31-45
 	//Daggers
-		{name: "Iron Dagger",	level:3,	attackStat:5,	power:15,	value:10, 	buffs:[]},
-		{name: "Tanto",			level:3,	attackStat:5,	power:21,	value:10, 	buffs:[]},
-		{name: "Polished Iron Dagger",level:3,attackStat:5,	power:20,	value:20, 	buffs:[]},
+		{name: "Iron Dagger",	level:3,	attackStat:5,	power:15,	value:10, 	buffs:{}},
+		{name: "Tanto",			level:3,	attackStat:5,	power:21,	value:10, 	buffs:{}},
+		{name: "Polished Iron Dagger",level:3,attackStat:5,	power:20,	value:20, 	buffs:{}},
 	//Swords
-		{name: "Longsword",		level:3,	attackStat:4,	power:12,	value:20, 	buffs:[]},
-		{name: "Spatha",		level:3,	attackStat:6,	power:34,	value:20, 	buffs:[]},
-		{name: "Claymore",		level:3,	attackStat:4,	power:12,	value:20, 	buffs:[]},
-		{name: "Katana",		level:3,	attackStat:4,	power:12,	value:20, 	buffs:[]},
+		{name: "Longsword",		level:3,	attackStat:4,	power:12,	value:20, 	buffs:{}},
+		{name: "Spatha",		level:3,	attackStat:6,	power:34,	value:20, 	buffs:{}},
+		{name: "Claymore",		level:3,	attackStat:4,	power:12,	value:20, 	buffs:{}},
+		{name: "Katana",		level:3,	attackStat:4,	power:12,	value:20, 	buffs:{}},
 	//Blunt
-		{name: "Adze",			level:3,	attackStat:4,	power:12,	value:20, 	buffs:[]},
-		{name: "Mace",			level:3,	attackStat:4,	power:12,	value:20, 	buffs:[]},
-		{name: "Whip",			level:3,	attackStat:5,	power:12,	value:20, 	buffs:[]},
+		{name: "Adze",			level:3,	attackStat:4,	power:12,	value:20, 	buffs:{}},
+		{name: "Mace",			level:3,	attackStat:4,	power:12,	value:20, 	buffs:{}},
+		{name: "Whip",			level:3,	attackStat:5,	power:12,	value:20, 	buffs:{}},
 	//Pole Weapon
-		{name: "Pole-Axe",		level:3,	attackStat:4,	power:12,	value:20, 	buffs:[]},
+		{name: "Pole-Axe",		level:3,	attackStat:4,	power:12,	value:20, 	buffs:{}},
 	//Ranged
-		{name: "Bolas",			level:3,	attackStat:5,	power:31,	value:20, 	buffs:[]},
-		{name: "Yew Bow",		level:3,	attackStat:5,	power:12,	value:20, 	buffs:[]},
-		{name: "Crossbow",		level:3,	attackStat:4,	power:12,	value:20, 	buffs:[]},
-		{name: "Maple Longbow",	level:3,	attackStat:6,	power:12,	value:20, 	buffs:[]},
+		{name: "Bolas",			level:3,	attackStat:5,	power:31,	value:20, 	buffs:{}},
+		{name: "Yew Bow",		level:3,	attackStat:5,	power:12,	value:20, 	buffs:{}},
+		{name: "Crossbow",		level:3,	attackStat:4,	power:12,	value:20, 	buffs:{}},
+		{name: "Maple Longbow",	level:3,	attackStat:6,	power:12,	value:20, 	buffs:{}},
 		],//15
 		[//46-60
 	//Daggers
-		{name: "Ornate Dagger",	level:4,	attackStat:5,	power:22,	value:400, 	buffs:[]},
-		{name: "Seax",			level:4,	attackStat:6,	power:12,	value:20, 	buffs:[]},
-		{name: "Karambit",		level:4,	attackStat:5,	power:12,	value:20, 	buffs:[]},
+		{name: "Ornate Dagger",	level:4,	attackStat:5,	power:22,	value:400, 	buffs:{}},
+		{name: "Seax",			level:4,	attackStat:6,	power:12,	value:20, 	buffs:{}},
+		{name: "Karambit",		level:4,	attackStat:5,	power:12,	value:20, 	buffs:{}},
 	//Swords
-		{name: "Estoc",			level:4,	attackStat:4,	power:12,	value:20, 	buffs:[]},
-		{name: "Falcata",		level:4,	attackStat:6,	power:12,	value:20, 	buffs:[]},
-		{name: "Maquahuitl",	level:4,	attackStat:4,	power:70,	value:20, 	buffs:[]},
-		{name: "Khopesh",		level:4,	attackStat:4,	power:12,	value:20, 	buffs:[]},
+		{name: "Estoc",			level:4,	attackStat:4,	power:12,	value:20, 	buffs:{}},
+		{name: "Falcata",		level:4,	attackStat:6,	power:12,	value:20, 	buffs:{}},
+		{name: "Maquahuitl",	level:4,	attackStat:4,	power:70,	value:20, 	buffs:{}},
+		{name: "Khopesh",		level:4,	attackStat:4,	power:12,	value:20, 	buffs:{}},
 	//Blunt
-		{name: "King's Mace",	level:4,	attackStat:4,	power:12,	value:20, 	buffs:[]},
-		{name: "Warhammer",		level:4,	attackStat:4,	power:12,	value:20, 	buffs:[]},
-		{name: "Spiked Flail",	level:4,	attackStat:6,	power:12,	value:20, 	buffs:[]},
+		{name: "King's Mace",	level:4,	attackStat:4,	power:12,	value:20, 	buffs:{}},
+		{name: "Warhammer",		level:4,	attackStat:4,	power:12,	value:20, 	buffs:{}},
+		{name: "Spiked Flail",	level:4,	attackStat:6,	power:12,	value:20, 	buffs:{}},
 	//Pole Weapon
-		{name: "Halberd",		level:4,	attackStat:4,	power:12,	value:20, 	buffs:[]},
+		{name: "Halberd",		level:4,	attackStat:4,	power:12,	value:20, 	buffs:{}},
 	//Ranged
-		{name: "Altatl",		level:4,	attackStat:6,	power:12,	value:20, 	buffs:[]},
-		{name: "Meteor Hammer",	level:4,	attackStat:6,	power:12,	value:20, 	buffs:[]},
-		{name: "Yew Longbow",	level:4,	attackStat:5,	power:12,	value:20, 	buffs:[]},
-		{name: "Heavy Crossbow",level:4,	attackStat:4,	power:12,	value:20, 	buffs:[]},
+		{name: "Altatl",		level:4,	attackStat:6,	power:12,	value:20, 	buffs:{}},
+		{name: "Meteor Hammer",	level:4,	attackStat:6,	power:12,	value:20, 	buffs:{}},
+		{name: "Yew Longbow",	level:4,	attackStat:5,	power:12,	value:20, 	buffs:{}},
+		{name: "Heavy Crossbow",level:4,	attackStat:4,	power:12,	value:20, 	buffs:{}},
 		],//15
 	//w5 - Historic Weapons
 	//w6 - Legendary Weapons
 	//Historic artifact, can be examined for effects
 		[//61-80
 		//Daggers
-		{name: "Seax of Beagnoth",	level:5,	attackStat:6,	power:100,	value:20, 	buffs:[]},
-		{name: "Ulu",				level:5,	attackStat:5,	power:100,	value:20, 	buffs:[]},
-		{name: "Surmene Knife",		level:5,	attackStat:5,	power:100,	value:20, 	buffs:[]},
-		{name: "Scythe of Cronus",	level:5,	attackStat:4,	power:100,	value:20, 	buffs:[]},
-		{name: "Carnwennan",		level:5,	attackStat:4,	power:100,	value:20, 	buffs:[]},
-		{name: "Dagger of Rostam",	level:5,	attackStat:4,	power:100,	value:20, 	buffs:[]},
-		{name: "Kris Taming Sari",	level:5,	attackStat:4,	power:100,	value:20, 	buffs:[]},
-		{name: "Misericorde",		level:5,	attackStat:4,	power:100,	value:20, 	buffs:[]},
+		{name: "Seax of Beagnoth",	level:5,	attackStat:6,	power:100,	value:20, 	buffs:{}},
+		{name: "Ulu",				level:5,	attackStat:5,	power:100,	value:20, 	buffs:{}},
+		{name: "Surmene Knife",		level:5,	attackStat:5,	power:100,	value:20, 	buffs:{}},
+		{name: "Scythe of Cronus",	level:5,	attackStat:4,	power:100,	value:20, 	buffs:{}},
+		{name: "Carnwennan",		level:5,	attackStat:4,	power:100,	value:20, 	buffs:{}},
+		{name: "Dagger of Rostam",	level:5,	attackStat:4,	power:100,	value:20, 	buffs:{}},
+		{name: "Kris Taming Sari",	level:5,	attackStat:4,	power:100,	value:20, 	buffs:{}},
+		{name: "Misericorde",		level:5,	attackStat:4,	power:100,	value:20, 	buffs:{}},
 		//Blunt&Axes
-		{name: "Zeus' Labrys",		level:5,	attackStat:4,	power:100,	value:20, 	buffs:[]},
-		{name: "Chentu",			level:5,	attackStat:4,	power:100,	value:20, 	buffs:[]},
-		{name: "Sharur",			level:5,	attackStat:4,	power:100,	value:20, 	buffs:[]},
-		{name: "Heracles' Club",	level:5,	attackStat:4,	power:100,	value:20, 	buffs:[]},
+		{name: "Zeus' Labrys",		level:5,	attackStat:4,	power:100,	value:20, 	buffs:{}},
+		{name: "Chentu",			level:5,	attackStat:4,	power:100,	value:20, 	buffs:{}},
+		{name: "Sharur",			level:5,	attackStat:4,	power:100,	value:20, 	buffs:{}},
+		{name: "Heracles' Club",	level:5,	attackStat:4,	power:100,	value:20, 	buffs:{}},
 		//Pole Weapons
-		{name: "Trident of Poseidon",level:5,	attackStat:4,	power:100,	value:20, 	buffs:[]},
-		{name: "Otegine",			level:5,	attackStat:4,	power:100,	value:20, 	buffs:[]},
-		{name: "Spear of Lugh",		level:5,	attackStat:4,	power:100,	value:20, 	buffs:[]},
-		{name: "Areadbhar",			level:5,	attackStat:4,	power:100,	value:20, 	buffs:[]},
-		{name: "Aram",				level:5,	attackStat:4,	power:90,	value:20, 	buffs:[]},
-		{name: "Gungnir",			level:5,	attackStat:4,	power:90,	value:20, 	buffs:[]},
-		{name: "Maltet",			level:5,	attackStat:4,	power:90,	value:20, 	buffs:[]},
-		{name: "Ruyi Jingu Bang",	level:5,	attackStat:4,	power:90,	value:20, 	buffs:[]},
-		{name: "Was",				level:5,	attackStat:4,	power:90,	value:20, 	buffs:[]}, //scepter from egyptian...
+		{name: "Trident of Poseidon",level:5,	attackStat:4,	power:100,	value:20, 	buffs:{}},
+		{name: "Otegine",			level:5,	attackStat:4,	power:100,	value:20, 	buffs:{}},
+		{name: "Spear of Lugh",		level:5,	attackStat:4,	power:100,	value:20, 	buffs:{}},
+		{name: "Areadbhar",			level:5,	attackStat:4,	power:100,	value:20, 	buffs:{}},
+		{name: "Aram",				level:5,	attackStat:4,	power:90,	value:20, 	buffs:{}},
+		{name: "Gungnir",			level:5,	attackStat:4,	power:90,	value:20, 	buffs:{}},
+		{name: "Maltet",			level:5,	attackStat:4,	power:90,	value:20, 	buffs:{}},
+		{name: "Ruyi Jingu Bang",	level:5,	attackStat:4,	power:90,	value:20, 	buffs:{}},
+		{name: "Was",				level:5,	attackStat:4,	power:90,	value:20, 	buffs:{}}, //scepter from egyptian...
 		//Swords
-		{name: "Tizona",			level:5,	attackStat:4,	power:90,	value:20, 	buffs:[]},//El Cid's sword
-		{name: "Sword of Essen",	level:5,	attackStat:4,	power:90,	value:20, 	buffs:[]},
-		{name: "Sword of St. Wenceslas",level:5,attackStat:4,	power:90,	value:12, 	buffs:[]},
-		{name: "Guy of Warwick's Sword",level:5,attackStat:4,	power:90,	value:12, 	buffs:[]},
-		{name: "Sabre of Charlemagne",level:5,	attackStat:4,	power:90,	value:12, 	buffs:[]},//false legend
-		{name: "Lobera",			level:5,	attackStat:4,	power:90,	value:4040, buffs:[]},
-		{name: "Joyeuse",			level:5,	attackStat:4,	power:90,	value:40, 	buffs:[]},
-		{name: "Legbiter",			level:5,	attackStat:4,	power:90,	value:40, 	buffs:[]},
-		{name: "Sword of Mars",		level:5,	attackStat:4,	power:90,	value:40, 	buffs:[]},
+		{name: "Tizona",			level:5,	attackStat:4,	power:90,	value:20, 	buffs:{}},//El Cid's sword
+		{name: "Sword of Essen",	level:5,	attackStat:4,	power:90,	value:20, 	buffs:{}},
+		{name: "Sword of St. Wenceslas",level:5,attackStat:4,	power:90,	value:12, 	buffs:{}},
+		{name: "Guy of Warwick's Sword",level:5,attackStat:4,	power:90,	value:12, 	buffs:{}},
+		{name: "Sabre of Charlemagne",level:5,	attackStat:4,	power:90,	value:12, 	buffs:{}},//false legend
+		{name: "Lobera",			level:5,	attackStat:4,	power:90,	value:4040, buffs:{}},
+		{name: "Joyeuse",			level:5,	attackStat:4,	power:90,	value:40, 	buffs:{}},
+		{name: "Legbiter",			level:5,	attackStat:4,	power:90,	value:40, 	buffs:{}},
+		{name: "Sword of Mars",		level:5,	attackStat:4,	power:90,	value:40, 	buffs:{}},
 		//Ranged
-		{name: "Xiuhcoatl",			level:5,	attackStat:5,	power:100,	value:40, 	buffs:[]},
-		{name: "Mistletoe",			level:5,	attackStat:5,	power:100,	value:40, 	buffs:[]},
-		{name: "Sagitta",			level:5,	attackStat:5,	power:100,	value:40, 	buffs:[]},
-		{name: "Fail-Not",			level:5,	attackStat:5,	power:100,	value:40, 	buffs:[]},
-		{name: "Kongo",				level:5,	attackStat:5,	power:100,	value:40, 	buffs:[]},
-		{name: "Thunderbolt",		level:5,	attackStat:5,	power:100,	value:40, 	buffs:[]},
-		{name: "Trident of Poseidon",level:5,	attackStat:5,	power:100,	value:40, 	buffs:[]},
+		{name: "Xiuhcoatl",			level:5,	attackStat:5,	power:100,	value:40, 	buffs:{}},
+		{name: "Mistletoe",			level:5,	attackStat:5,	power:100,	value:40, 	buffs:{}},
+		{name: "Sagitta",			level:5,	attackStat:5,	power:100,	value:40, 	buffs:{}},
+		{name: "Fail-Not",			level:5,	attackStat:5,	power:100,	value:40, 	buffs:{}},
+		{name: "Kongo",				level:5,	attackStat:5,	power:100,	value:40, 	buffs:{}},
+		{name: "Thunderbolt",		level:5,	attackStat:5,	power:100,	value:40, 	buffs:{}},
+		{name: "Trident of Poseidon",level:5,	attackStat:5,	power:100,	value:40, 	buffs:{}},
+		{name: "Cootie Gras",		level:5,	attackStat:6,	power:150,	value:5000,	buffs:{}}
 		]//37 Divide in half and give another level of legendheals:
 	],
 	weapon6: [//81+ Legendary weapons. only obtainable through boss battles
