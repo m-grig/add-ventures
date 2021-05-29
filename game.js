@@ -480,15 +480,21 @@ class Wilderness { //as you traverse the path
 			i = Math.round(i);
 			visit(i);
 		} else if (Math.random() >.9){
-			let type = "weapon";//!
-			let i = Math.round(Math.random() * (gameItems[type][0].length - 1));
-			let item = Object.assign({}, gameItems[type][0][i]);
+			let type = "food";//!
+			let item = Object.assign({}, randomChoice(gameItems[type][0]));
 			item.type = type;
-			addItem(item);
-
-			
+			addItem(item);			
 			let text = randomChoice(phrase.obtain) + item.name;
-
+			pickupSound.play();
+			gameText(text);
+			console.log(item);
+			updateInventory();
+		} else if (Math.random() >.95){
+			let type = "weapon";//!
+			let item = Object.assign({}, randomChoice(gameItems[type][0]));
+			item.type = type;
+			addItem(item);			
+			let text = randomChoice(phrase.obtain) + item.name;
 			pickupSound.play();
 			gameText(text);
 			console.log(item);
@@ -945,7 +951,7 @@ function damageMonster(power) {
 	let hit = power - spawnedMonster.defense;
 	if (hit >= spawnedMonster.hp) {
 		//Monster is defeated
-		document.getElementById("gameText").innerHTML = "The " + spawnedMonster.name + randomChoice(phrase.victory) + " with a finishing blow of "+hit;
+		document.getElementById("gameText").innerHTML = "The " + spawnedMonster.name + randomChoice(phrase.victory) + " with a finishing blow of "+colorize(hit,colorPalette.hpLight,true)+" "+getIcon("hp");
 		let gainedLevel = gainXP(spawnedMonster.hp);
 		spawnedMonster.hp = 0;
 		document.getElementById("monsterLevel").innerHTML = spawnedMonster.hp;
