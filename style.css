@@ -305,67 +305,6 @@
 		#value {
 			margin-left: 150px;
 		}
-		#cookButton {
-			position: absolute;
-			top:660px;
-			margin-left: 285px;
-			opacity:.9;
-		}
-		#cookButton:hover {
-
-			opacity: 1;
-		}
-		#cookScrn {
-			visibility: hidden;
-			position: absolute;
-			width: 150px;
-			top: 500px;
-			margin-left: 230px;
-			z-index: 3;
-			background-color: gray;
-			text-align: center;
-		}
-		#cookScrn button {
-			border: none;
-			margin:5px;
-			width: 100px;
-			height: 30px;
-			font-family: 'Munro';
-			font-size: 10pt;
-			background-color: #2D2C2A;
-			color: white;
-			text-align: center;
-		}
-		#cookables button {
-			border: none;
-			margin-left: 0px;
-			margin-bottom: 2px;
-			width: 125px;
-			height: 30px;
-			font-family: 'Munro';
-			font-size: 10pt;
-			background-color: #BABABA;
-			text-align: center;
-		}
-		#cookScrn button:hover {
-			border: 2px solid white;
-		}
-		#cookables button:visited {
-			border: 2px solid red;
-		}
-		#cookables {
-			
-			height: 160px;
-			overflow: scroll;
-			background-color: dimgray;
-		}
-		#cat {
-			pointer-events: none;
-			position: absolute;
-			top: -128px;
-			margin-left: -188px;
-		}
-
 		/*Moves*/
 		#moveset {
 			position: absolute;

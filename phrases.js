@@ -12,11 +12,19 @@ var phrase = {
 	cont4:["Your body cries out for rest from your travels.","You feel an intense need to find sustanence.","You wonder when you last ate.","You press on, though you have no strength.","You feel drained of all vigour.","Your feet feel heavy.","Your feet grow weary.","Your step falters.","Your strength wavers.","You grow weary as strength saps from your bones."],
 	//Defeating a boss
 	cont5:["The sky clears as life returns to your surroundings.","Triumph is yours, for evil has been vanquished.","Relief washes over you as your foe sinks into the ground.","A great scourge has been removed from the land."],
+	encounter:[//starts with opening context: "among x you " + ...
+		"come across",
+		"run into",
+
+	],
 	victory:[
 		" has been defeated",
 		" falls to the ground",
 		" crumbles before you",
 		" perishes"
+	],
+	meetNpc: [
+		"Among the rabble you spot {}"
 	]
 };
 
@@ -30,3 +38,24 @@ var adj = {
 };
 
 var alph = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
+
+var pronouns = {
+	male: {
+		po: "him",//pronoun object "dog of him"
+		pp: "his",//pronoun possessive "dog is his"
+		ap: "his",//adjectival possessive "his dog"
+		ps: "he"//pronoun subject "he is dog"
+	},
+	female: {
+		po: "her",
+		pp: "hers",
+		ap: "her",
+		ps: "she"
+	},
+	neuter: {
+		po: "it",
+		pp: "its",
+		ap: "its",
+		ps: "it"
+	}
+}

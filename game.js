@@ -1057,9 +1057,6 @@ function monsterDeath(gainedLevel=false) {
 	inBattle = false;
 	if (!gainedLevel) {
 		winSound.play();
-	} else {
-		let lvlText = colorize("level "+player.level, colorPalette.levelUp,true);
-		document.getElementById("gameText").innerHTML += " Reached "+lvlText;
 	}
 	//Determine drop
 	player.money += spawnedMonster.reward.money;
@@ -1202,23 +1199,23 @@ function classDescription(selectedClass, name) {
 		"Historian",
 			["QUICK THINKER:<br>You can flee from battle at any point.<br>","RECORD OF THE PAST:<br>Allows you to identify historic items without visiting a museum."]
 		],
-		["No bard is needed to proclaim your name, the bow sings songs of its own. Darting about with grace, your nimbleness is your greatest treasure has kept you alive in the wilderness.",
+		["No bard is needed to proclaim your name, the bow sings songs of its own. Darting about with grace, your nimbleness is your greatest treasure as it has kept you alive in the wilderness.",
 		"Ranger",
 			["EXPEDITIONER/Navigator:<br>You are able to set your course before ever obtaining a compass.<br>","RECONNAISSANCE:<br>You know the reward a foe will provide upon it's defeat"]
 		],
-		["Clunky, yet.... stupid.",
+		["Clunky, yet.... ignorant.",
 		"Oaf",
-			["CLUMSY:","BUMBLER:","BUMPKIN:<br>Too stupid to be tricked by an enemy."]
+			["CLUMSY:","BUMBLER:","BUMPKIN:<br>You fail to comprehend the clever tricks of the enemy, therefore you never fall prey to them."]
 		],
 		["A far cry from the heavy-handed methods of the Paladin, you bring life to those around you. Unwavering morals.",
 		"Cleric",
-			["ACCOUNTABILITY:<br>The hidden-sins of your teammates are revealed to you upon joining up.<br>","WILLING MARTYR:","CONVERSION:<br>If successful, the enemy is defeated and might give useful information."]
+			["WILLING MARTYR:","CONVERSION:<br>If successful, the enemy is defeated and might give useful information."]//"ACCOUNTABILITY:<br>The hidden-sins of your teammates are revealed to you upon joining up.<br>",
 		],
 		["No moral compass, but an unwavering sense of direction. This light fingered degenerate can become quite heavy handed when needed.",
 		"Outlaw",
 			["PICKPOCKET:","DECEPTION:","COWARDICE:<br>You flee from battle without ever dropping items."]
 		],
-		["This thick skinned remnant of the past often goes unnoticed. But is spry enough to spring into action and do nothing.",
+		["This thick skinned remnant of the past often goes unnoticed. But is spry enough to spring into action and do the bare minimum.",
 		"Decrepit",
 			["SPINES:","INVISIBLE:<br>Your unremarkable looks allow you to go undetected by monsters and law enforcement.<br>","COMPOSTER:<br>You may eat spoiled food with no ill effects."]
 		],
@@ -1238,7 +1235,7 @@ function classDescription(selectedClass, name) {
 		"Alchemist",
 			["Fulminated Mercury:","Extractor:","CHRYSOPOEIA:<br>You begin your journey with 15 gold, and are able to tranform items to gold without visiting a merchant"]
 		],
-		["A race of giants who roam the grasslands as hunters of a terrifying demeanor. Gathers food, wields buffalos.",
+		["A race of giants who roam the grasslands as hunters of a terrifying demeanor. Gathers food and deals heavy blows.",
 		"Native",
 			["Stampede:<br>You have the chance to land an attack twice every time you attack.<br>","MEDICINE-MAN<br>You have spent years studying the healing arts. +3 to all healing acts.","Lightfooted:"]
 		]
@@ -1419,13 +1416,14 @@ function visit(location) {
 
 	if (locations[location][3]) {
 		n = Math.random() * 9;
-		var item = {name:"Book", type:"book", dunno:n, uses:1, value:15};
+		let item = {name:"Book", type:"book", dunno:n, uses:1, value:15};
 		addItem(item);
 		updateInventory();
 	} else {
-		var i = player.xpNext * .2;
+		let i = player.xpNext * .2;
 		i = Math.round(i);
 		gainXP(i);
+		document.getElementById("gameText").innerHTML += '<br> Gained '+colorize(i+' xp',colorPalette.levelUp)+'.'
 	};
 };
 function movePlayer() {//updates player location on the map
