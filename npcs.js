@@ -41,6 +41,11 @@ var npcData = {
         "smiling {npc} with an unusual gait",
         "flea ridden {npc} with less than a full set of teeth",
         "blabbering {npc} hobbling around a corner",
+        "{npc} talking to {po}self with a hushed whisper",
+        "{npc} blabbing to {po}self incoherently",
+        "hunched {npc} leaning against {ap} staff",
+        "{npc} burdened down with the cares of this world",
+        "{npc} sitting on {ap} possessions hoarding them to {po}self",
         "deceivingly friendly {npc} calling out to you by your first name"
     ]
 };

@@ -43,7 +43,7 @@ var phrase = {
 
 
 var adj = {
-	cons:["n imposing","n uninhabited","n elusive","n abandoned","n inviting","n exceptional","n immaculate"," splendid"," unique"," well-maintained"," delapidated"," lost"," empty"," strange"," remote"," beautiful"," large"," busy"," quaint"," popular"," distinguished"," useful"," traditional"," successful"," wonderful"," rare"," suitable"," sufficient"," famous"," civil"," curious"," lonely"," remarkable"," suspicious"," local"," major"," hidden"," pleasant"," solitary"],
+	cons:["n imposing","n uninhabited","n elusive","n abandoned","n inviting","n exceptional","n immaculate"," splendid"," unique"," well-maintained"," delapidated"," lost"," empty"," strange"," remote"," beautiful"," large"," busy"," quaint"," popular"," distinguished","n ornate"," traditional"," secluded"," successful"," wonderful"," rare"," suitable"," sufficient"," famous"," civil"," curious"," lonely"," remarkable"," suspicious"," local"," major"," hidden"," pleasant"," solitary"],
 	title:["Civil","Financial","Commerce","Commercial","Primary","Southern","Literature","Western","North","Classical","National","Lower","First","Standard","Independent","Upper","Eastern","Proper","Municipal","Technical","Prior","Cavandor","Administration","Public","General","Sector","Henondal","Capital","Community","High","Divisions","Common","Alchinol","Gerraway","Principle"],
 	names1:["Bar","Gar","Cor","Klip","Mel","Gip","Ver","Shil","Max","Grip","Mis","Ash","Astro","Imel","Lex","Dax","Sylv","Rex"],
 	names2:["amear","con","laft","slet","slin","pen","kilm","rider","-cispel","-kimlet","enteen","ion","kum","ket","kelet","icus","lus","sus","em","in","ul"]

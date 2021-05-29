@@ -479,22 +479,6 @@ class Wilderness { //as you traverse the path
 			let i = Math.random()*7;
 			i = Math.round(i);
 			visit(i);
-		} else if (Math.random() > .8) {//chance to encounter npc
-			let npc = randomChoice(npcData.secondary);
-			if (!('gender' in npc)) {
-				npc.gender = randomChoice(['male','female']);
-			}
-			let npcPron = pronouns[npc.gender];
-
-			let introText = randomChoice(npcData.traits);
-			introText = introText.replace('{npc}',npc.name).replace('{po}',npcPron.po).replace('{pp}',npcPron.pp).replace('{ap}',npcPron.ap).replace('{ps}',npcPron.ps);
-			if (introText[0] in alphabet.vowels) {
-				introText = ' an '+introText;
-			} else {
-				introText = ' a '+introText;
-			}
-			let text = randomChoice(phrase.meetNpc)+" you "+randomChoice(phrase.encounter)+introText+'.';
-			gameText(text);
 		} else if (Math.random() >.9){
 			let type = "food";//!
 			let item = Object.assign({}, randomChoice(gameItems[type][0]));
@@ -515,6 +499,23 @@ class Wilderness { //as you traverse the path
 			gameText(text);
 			console.log(item);
 			updateInventory();
+		} else if (Math.random() > .6) {//chance to encounter npc
+			let npc = randomChoice(npcData.secondary);
+			if (!('gender' in npc)) {
+				npc.gender = randomChoice(['male','female']);
+			}
+			let npcPron = pronouns[npc.gender];
+
+			let introText = randomChoice(npcData.traits);
+			introText = introText.replace('{npc}',npc.name).replace('{po}',npcPron.po).replace('{pp}',npcPron.pp).replace('{ap}',npcPron.ap).replace('{ps}',npcPron.ps);
+			console.log(introText[0]);
+			if (alphabet.vowels.includes(introText[0].toLowerCase())) {
+				introText = ' an '+introText;
+			} else {
+				introText = ' a '+introText;
+			}
+			let text = randomChoice(phrase.meetNpc)+" you "+randomChoice(phrase.encounter)+introText+'.';
+			gameText(text);
 		} else {
 			clickSound.play();
 			//calculate continue text
