@@ -15,16 +15,29 @@ var phrase = {
 	encounter:[//starts with opening context: "among x you " + ...
 		"come across",
 		"run into",
-
+		"encounter",
+		"happen to see",
+		"spot",
+		"see",
+		"spy",
+		"bumble into",
+		"nearly overlook"
+	],
+	meetNpc: [//used as opening context for meeting npcs
+		"Among the rabble",
+		"As you continue your path",
+		"As fate would have it",
+		"An unusual encounter,",
+		"What is this,",
+		"How unexpected,",
+		"You don't get this every day,",
+		"This is unusual,"
 	],
 	victory:[
 		" has been defeated",
 		" falls to the ground",
 		" crumbles before you",
 		" perishes"
-	],
-	meetNpc: [
-		"Among the rabble you spot {}"
 	]
 };
 
@@ -37,7 +50,10 @@ var adj = {
 
 };
 
-var alph = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
+var alphabet = {
+	vowels:["a","e","i","o","u"],
+	consonants:["b","c","d","f","g","h","j","k","l","m","n","p","q","r","s","t","v","w","x","y","z"]
+};
 
 var pronouns = {
 	male: {

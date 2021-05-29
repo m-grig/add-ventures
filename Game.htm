@@ -9,6 +9,7 @@
 	<script type="text/javascript" src="items.js"></script>
 	<script type="text/javascript" src="moves.js"></script>
 	<script type="text/javascript" src="phrases.js"></script>
+	<script type="text/javascript" src="npcs.js"></script>
 </head>
 
 <body id="screen" onload="titleTheme()">
@@ -116,12 +117,6 @@
 		<div id="cityScreen">
 			<input type="image" id="closeMerchant" src="resources/closeMerchant.png" onclick="exitCity()">
 			<input type="image" onclick="openMerchant()" src="resources/merchant.png">
-		</div>
-		<div id="cookScrn">
-			<label>Cooking:</label>
-			<input type="image" id="closeMerchant" src="resources/closeMerchant.png" onclick="closeCook()">
-			<div id="cookables"></div>
-			<button onclick="cook()">Cook</button>
 		</div>
 		<div id="map" style="visibility: hidden">
 			<img id="mapImg" src="resources/map.png">
@@ -238,7 +233,7 @@
 			<input type="image" value="8" name="crustacean" src="resources/classes/crustacean.png" onmouseover="classDescription(value, name)" onclick="classSelection(name,'Crustacean')">
 			<input type="image" value="9" name="mechanic" src="resources/classes/mechanic.png" onmouseover="classDescription(value, name)" onclick="classSelection(name,'Mechanic')">
 			<input type="image" value="10" name="alchemist" src="resources/classes/alchemist.png" onmouseover="classDescription(value, name)" onclick="classSelection(name,'Alchemist')">
-			<input type="image" value="11" name="nativ" src="resources/classes/nativ.png" onmouseover="classDescription(value, name)" onclick="classSelection(name,'Native')">
+			<input type="image" value="11" name="nativ" src="resources/classes/niobroran.png" onmouseover="classDescription(value, name)" onclick="classSelection(name,'Niobroran')">
 		</div>
 	</div>
 	<div id="gameOver">

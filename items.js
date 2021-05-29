@@ -205,7 +205,7 @@ var gameItems = {
 		{name: "Kongo",				level:5,	attackStat:5,	power:100,	value:40, 	buffs:{}},
 		{name: "Thunderbolt",		level:5,	attackStat:5,	power:100,	value:40, 	buffs:{}},
 		{name: "Trident of Poseidon",level:5,	attackStat:5,	power:100,	value:40, 	buffs:{}},
-		{name: "Cootie Gras",		level:5,	attackStat:6,	power:150,	value:5000,	buffs:{}}
+		//{name: "Cootie Gras",		level:5,	attackStat:6,	power:150,	value:5000,	buffs:{}}
 		]//37 Divide in half and give another level of legendheals:
 	],
 	weapon6: [//81+ Legendary weapons. only obtainable through boss battles
