@@ -11,7 +11,13 @@ var phrase = {
 	//Low hp
 	cont4:["Your body cries out for rest from your travels.","You feel an intense need to find sustanence.","You wonder when you last ate.","You press on, though you have no strength.","You feel drained of all vigour.","Your feet feel heavy.","Your feet grow weary.","Your step falters.","Your strength wavers.","You grow weary as strength saps from your bones."],
 	//Defeating a boss
-	cont5:["The sky clears as life returns to your surroundings.","Triumph is yours, for evil has been vanquished.","Relief washes over you as your foe sinks into the ground.","A great scourge has been removed from the land."]
+	cont5:["The sky clears as life returns to your surroundings.","Triumph is yours, for evil has been vanquished.","Relief washes over you as your foe sinks into the ground.","A great scourge has been removed from the land."],
+	victory:[
+		" has been defeated",
+		" falls to the ground",
+		" crumbles before you",
+		" perishes"
+	]
 };
 
 

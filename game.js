@@ -318,6 +318,8 @@ var colorPalette = {
 	combo: "#B7978A",//weapon colors
 	speed: "#8DB78F",//weapon colors
 	strength: "#8DB7C7",//weapon colors
+	hpDark: "#750F0F",
+	hpLight: "#A62B2B",//for attacks
 	standard: "#FFFFFF",//nothing special weapon
 	rare: "#9EC8FF",//blue
 	historic: "#8D7AD6",//purple 572AB0
@@ -325,49 +327,49 @@ var colorPalette = {
 }
 
 var monsters = {
-	//0-name 1-xp1 2-weight 3-lvl 4-hp 5-str 6-speed
+	//0-name 1-defense 2-weight 3-lvl 4-hp 5-str 6-speed
 	all:[
-	["goblin",	10, 90, 1, 1, 1, 1],
-	["man",		10, 70, 1, 2, 1, 1],
-	["triplet",	10, 60, 1, 3, 1, 2],
-	["fink",	10, 50, 1, 1, 1, 3],
-	["haas",	10, 40, 1, 1, 2, 4],
-	["punisher",10, 45, 1, 2, 3, 1],
-	["heckler",	10, 40, 1, 4, 2, 1],
-	["hound",	10, 40, 1, 1, 3, 3],
-	["brute",	10, 40, 1, 3, 3, 3],
-	["deformed",10, 30, 1, 3, 2, 1],
-	["mimic",	10, 30, 1, 2, 2, 1],
-	["guardian",10, 40, 1, 3, 3, 2],
-	["miser",	10, 30, 1, 4, 1, 2]
+	["goblin",	0, 90, 1, 1, 1, 1],
+	["man",		1, 70, 1, 2, 1, 1],
+	["triplet",	0, 60, 1, 3, 1, 2],
+	["fink",	0, 50, 1, 1, 1, 3],
+	["haas",	0, 40, 1, 1, 2, 4],
+	["punisher",1, 45, 1, 2, 3, 1],
+	["heckler",	1, 40, 1, 4, 2, 1],
+	["hound",	0, 40, 1, 1, 3, 3],
+	["brute",	0, 40, 1, 3, 3, 3],
+	["deformed",0, 30, 1, 3, 2, 1],
+	["mimic",	2, 30, 1, 2, 2, 1],
+	["guardian",1, 40, 1, 3, 3, 2],
+	["miser",	0, 30, 1, 4, 1, 2]
 	],
 	forest:[
 	["behemoth", 1, 5, 1, 7, 4, 3],
-	["warlord", 10, 10, 1, 3, 5, 5],
-	["fungus", 10, 30, 1, 3, 3, 3],
-	["faerie", 10, 50, 1, 2, 2, 5],
-	["weeping willow", 10, 60, 1, 4, 3, 2],
-	["dwarf", 10, 70, 1, 2, 4, 2],
-	["stag", 10, 60, 1, 4, 3, 2],
-	["fumigator", 10, 50, 1, 2, 3, 2],
-	["highlander", 10, 50, 1, 3, 2, 3],
-	["asterlux", 10, 50, 1, 3, 2, 3]
+	["warlord", 1, 10, 1, 3, 5, 5],
+	["fungus", 2, 30, 1, 3, 3, 3],
+	["faerie", 0, 50, 1, 2, 2, 5],
+	["weeping willow", 1, 60, 1, 4, 3, 2],
+	["dwarf", 1, 70, 1, 2, 4, 2],
+	["stag", 0, 60, 1, 4, 3, 2],
+	["fumigator", 0, 50, 1, 2, 3, 2],
+	["highlander", 0, 50, 1, 3, 2, 3],
+	["asterlux", 0, 50, 1, 3, 2, 3]
 	],
 
 	coast:[
-	["behemoth", 1, 1, 1, 8, 5, 2],
-	["warlord", 10, 5, 1, 4, 2, 5],
-	["khnum", 60, 75, 1, 2, 2, 3],
-	["minotaur", 60, 50, 1, 5, 4, 2]
+	["behemoth", 2, 1, 1, 8, 5, 2],
+	["warlord", 2, 5, 1, 4, 2, 5],
+	["khnum", 1, 75, 1, 2, 2, 3],
+	["minotaur", 2, 50, 1, 5, 4, 2]
 	],
 
 	desert:[
-	["behemoth", 1, 1, 1, 6, 5, 4],
-	["warlord", 10, 5, 1, 3, 7, 3]
+	["behemoth", 2, 1, 1, 6, 5, 4],
+	["warlord", 1, 5, 1, 3, 7, 3]
 	],
 	tundra:[
 	["behemoth", 1, 90, 1, 12, 7, 1],
-	["warlord", 10, 75, 1, 6, 3, 4]
+	["warlord", 1, 75, 1, 6, 3, 4]
 	]
 };
 
@@ -484,8 +486,8 @@ class Wilderness { //as you traverse the path
 			item.type = type;
 			addItem(item);
 
-			i = Math.round(Math.random() * (phrase.obtain.length - 1));
-			let text = phrase.obtain[i] + item.name;
+			
+			let text = randomChoice(phrase.obtain) + item.name;
 
 			pickupSound.play();
 			gameText(text);
@@ -497,22 +499,14 @@ class Wilderness { //as you traverse the path
 			if (bossCount > 5) {
 				//health is good
 				if (statNumerators.hp/statDenominators.hp > .5) {
-					var i = Math.random() * (phrase.cont1.length - 1);
-					i = Math.round(i);
-					var n = phrase.cont1[i];
+					var n = randomChoice(phrase.cont1);
 				} else {
-					var i = Math.random() * (phrase.cont4.length - 1);
-					i = Math.round(i);
-					var n = phrase.cont4[i];
+					var n = randomChoice(phrase.cont4);
 				};
 			} else if (bossCount > 1) {
-				var i = Math.random() * (phrase.cont2.length - 1);
-				i = Math.round(i);
-				var n = phrase.cont2[i];
+				var n = randomChoice(phrase.cont2);
 			} else {
-				var i = Math.random() * (phrase.cont3.length - 1);
-				i = Math.round(i);
-				var n = phrase.cont3[i];
+				var n = randomChoice(phrase.cont3);
 			};
 			gameText(n);
 		};
@@ -948,16 +942,15 @@ function defend() {
 };
 
 function damageMonster(power) {
-	if (power >= spawnedMonster.hp) {
+	let hit = power - spawnedMonster.defense;
+	if (hit >= spawnedMonster.hp) {
 		//Monster is defeated
-		document.getElementById("gameText").innerHTML = spawnedMonster.name + " has been defeated";
+		document.getElementById("gameText").innerHTML = "The " + spawnedMonster.name + randomChoice(phrase.victory) + " with a finishing blow of "+hit;
 		let gainedLevel = gainXP(spawnedMonster.hp);
 		spawnedMonster.hp = 0;
 		document.getElementById("monsterLevel").innerHTML = spawnedMonster.hp;
 		if (bossBattle) {
-			var i = Math.random() * (phrase.cont5.length - 1);
-			i = Math.round(i);
-			var n = phrase.cont5[i];
+			var n = randomChoice(phrase.cont5);
 			gameText(n);
 			if (player.renown < 100) {
 				player.renown += 1;
@@ -969,10 +962,13 @@ function damageMonster(power) {
 		document.getElementById("threatIcon").src = "resources/threatB.png"
 		gameState = new Wilderness();
 		monsterDeath(gainedLevel);
+	} else if (hit <= 0){
+		document.getElementById("gameText").innerHTML = "You did 0 damage. The "+spawnedMonster.name+" looks at you with indifference";
+		gainXP(power);
 	} else {
 		spawnedMonster.hp = spawnedMonster.hp - power;
 		//monster attacks here
-		document.getElementById("gameText").innerHTML = "You deal " + power + " damage.";
+		document.getElementById("gameText").innerHTML = "You hit " + power + " dealing " + colorize(hit+" damage.",colorPalette.hpLight,true);
 		gainXP(power);
 		document.getElementById("monsterLevel").innerHTML = spawnedMonster.hp;
 	};
@@ -1043,10 +1039,10 @@ function clearText() {
 };
 
 //when Monster dies give XP and reward
-function monsterDeath(gainedLevel) {
+function monsterDeath(gainedLevel=false) {
 	//Clear screen
 	document.getElementById("monster").src = "resources/black.png";
-	document.getElementById("gameText").innerHTML = "You win!";
+	//document.getElementById("gameText").innerHTML = "You win!";
 	document.getElementById("monsterSelector").value = "";
 	document.getElementById("monsterHP").innerHTML = 0;
 	document.getElementById("monsterSelector").disabled = false;
@@ -1104,17 +1100,18 @@ function monsterAttack() {
 	} else {
 		mAttackSound.play();
 		let hitMin = Math.round(spawnedMonster.strength-spawnedMonster.strength*.5);
-		let power = randIntBetween(hitMin, spawnedMonster.strength) - statNumerators.defense;
-		if (power >= statNumerators.hp) {
+		let power = randIntBetween(hitMin, spawnedMonster.strength)
+		let hit = power - statNumerators.defense;
+		if (hit >= statNumerators.hp) {
 			deathSound.play();
 			death();
-		} else if (power <= 0) {
+		} else if (hit <= 0) {
 			power =  0;
 			document.getElementById("gameText").innerHTML = spawnedMonster.name + " landed its hit, and in its pathetic weakness it dealt no damage.";
 			return;
 		} else {
-			statNumerators.hp -= power;
-			document.getElementById("gameText").innerHTML = spawnedMonster.name + " dealt " + power + " damage.";
+			statNumerators.hp -= hit;
+			document.getElementById("gameText").innerHTML = spawnedMonster.name + " hit " + power + " dealing "+colorize(hit+" damage.",colorPalette.hpLight,true);
 			updateStats();
 		};	
 	};
@@ -1376,9 +1373,7 @@ function visit(location) {
 	//Check if location is a city/town
 	if (!locations[location][2]) {
 		gameState = new City();
-		var n = Math.random() * (phrase.location.length - 1);
-		n = Math.round(n);
-		var text = phrase.location[n];
+		var text = randomChoice(phrase.location);
 
 		n = Math.random() * (adj.names1.length - 1);
 		n = Math.round(n);
@@ -1395,9 +1390,7 @@ function visit(location) {
 	};
 	
 	//Update game text
-	var n = Math.random() * (phrase.location.length - 1);
-	n = Math.round(n);
-	var text = phrase.location[n];
+	var text = randomChoice(phrase.location);
 	
 	//decide phrasing for location
 	if (Math.random() > .5 || location > 5) {
@@ -1780,7 +1773,7 @@ function randIntBetween(min, max) { // min and max included
 	console.log(min,max)
 	return Math.floor(Math.random() * (max - min + 1) + min);
 }
-function colorize(text,color,bold) {
+function colorize(text,color,bold=false) {
 	if (bold) {
 		text = "<b>"+text+"</b>";
 	}
@@ -1788,4 +1781,9 @@ function colorize(text,color,bold) {
 }
 function getIcon(filename) {
 	return "<img class=\"icon\" src=\"resources/icons/"+filename+".png\">"
+}
+
+function  randomChoice(options) {
+	let i = Math.round(Math.random() * (options.length - 1));
+	return options[i]
 }
