@@ -514,7 +514,7 @@ class Wilderness { //as you traverse the path
 			let text = randomChoice(phrase.meetNpc)+" you "+randomChoice(phrase.encounter)+introText+'.';
 			gameText(text);
 
-			document.getElementById("monster").src = "resources/encounters/npcSecondary.png";
+			document.getElementById("monster").src = "resources/encounters/npcSecondary"+randomChoice([1,2,3])+".png";
 
 		} else {
 			clickSound.play();
@@ -989,7 +989,7 @@ function damageMonster(power) {
 		gameText("You did 0 damage. The "+spawnedMonster.name+" looks at you with indifference");
 		gainXP(power);
 	} else {
-		spawnedMonster.hp = spawnedMonster.hp - power;
+		spawnedMonster.hp = spawnedMonster.hp - hit;
 		//monster attacks here
 		gameText("You hit " + power + " dealing " + colorize(hit+" damage.",colorPalette.hpLight,true));
 		gainXP(power);

@@ -21,13 +21,14 @@ var phrase = {
 		"see",
 		"spy",
 		"bumble into",
+		"run into",
 		"nearly overlook"
 	],
 	meetNpc: [//used as opening context for meeting npcs
 		"Among the rabble",
 		"As you continue your path",
 		"As fate would have it",
-		"An unusual encounter,",
+		"As chance would have it,",
 		"What is this,",
 		"How unexpected,",
 		"You don't get this every day,",
