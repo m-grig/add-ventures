@@ -323,7 +323,7 @@ var colorPalette = {
 	standard: "#FFFFFF",//nothing special weapon
 	rare: "#9EC8FF",//blue
 	historic: "#8D7AD6",//purple 572AB0
-	legendary: "#FABEA5"//orange
+	legendary: "#FFC787"//orange
 }
 
 var monsters = {
@@ -425,9 +425,9 @@ class Fighting { //in battle
 			missSound.play();
 			//test if enemy is too agile
 			if (10 * statNumerators.speed / spawnedMonster.speed < 1) {
-				document.getElementById("gameText").innerHTML = "You are too slow to defeat this foe";
+				gameText("You are too slow to defeat this foe");
 			} else {
-				document.getElementById("gameText").innerHTML = "Oops, you missed!";
+				gameText("Oops, you missed!");
 			};
 		} else {
 			attackSound.play();
@@ -487,7 +487,6 @@ class Wilderness { //as you traverse the path
 			let text = randomChoice(phrase.obtain) + item.name;
 			pickupSound.play();
 			gameText(text);
-			console.log(item);
 			updateInventory();
 		} else if (Math.random() >.95){
 			let type = "weapon";//!
@@ -497,7 +496,6 @@ class Wilderness { //as you traverse the path
 			let text = randomChoice(phrase.obtain) + item.name;
 			pickupSound.play();
 			gameText(text);
-			console.log(item);
 			updateInventory();
 		} else if (Math.random() > .6) {//chance to encounter npc
 			let npc = randomChoice(npcData.secondary);
@@ -508,7 +506,6 @@ class Wilderness { //as you traverse the path
 
 			let introText = randomChoice(npcData.traits);
 			introText = introText.replace('{npc}',npc.name).replace('{po}',npcPron.po).replace('{pp}',npcPron.pp).replace('{ap}',npcPron.ap).replace('{ps}',npcPron.ps);
-			console.log(introText[0]);
 			if (alphabet.vowels.includes(introText[0].toLowerCase())) {
 				introText = ' an '+introText;
 			} else {
@@ -516,6 +513,9 @@ class Wilderness { //as you traverse the path
 			}
 			let text = randomChoice(phrase.meetNpc)+" you "+randomChoice(phrase.encounter)+introText+'.';
 			gameText(text);
+
+			document.getElementById("monster").src = "resources/encounters/npcSecondary.png";
+
 		} else {
 			clickSound.play();
 			//calculate continue text
@@ -653,7 +653,7 @@ function save() {
 	if (!chosenClass) {
 		alert("You have done nothing worth saving");
 	} else {
-		document.getElementById("gameText").innerHTML = "Your progress has been saved.";
+		gameText("Your progress has been saved.");
 		var saveData = [];
 		saveData[0] = chosenClass;
 		saveData[1] = player.level;
@@ -685,7 +685,7 @@ function clearSave() {
 };
 //Stats info
 function levelUp() {
-	//document.getElementById("gameText").innerHTML = "<br>Reached level <b>"+player.level+"</b>";
+	//gameText("<br>Reached level <b>"+player.level+"</b>");
 	let lvlTxt = colorize("level "+(player.level+1), colorPalette.levelUp, true);
 	document.getElementById("gameText").innerHTML += "<br>Reached "+lvlTxt;
 	player.level = player.level + 1;
@@ -852,11 +852,11 @@ function useItem(item, i) {
 		if (item.type === "food") {
 			if (player.class !== "Decrepit" && item.spoil < 1) {
 				inventory[i].heals = inventory[i].heals*(-1);
-				document.getElementById("gameText").innerHTML = "The " + item.name + " is spoiled and causes " + item.heals + " harm.";
+				gameText("The " + item.name + " is spoiled and causes " + item.heals + " harm.");
 				eat(i);
 				return;
 			};
-			document.getElementById("gameText").innerHTML = "You consume the " + item.name + " and regain " + item.heals + " HP. The nourishment is palatable";
+			gameText("You consume the " + item.name + " and regain " + item.heals + " HP. The nourishment is palatable");
 			eat(i);
 			//If hp = 100, you toss the ___ aside with disdain
 		} else if (item.type === "weapon") {
@@ -947,7 +947,7 @@ function equip(weapon) {
 
 	equippedWeapon = item;
 	//equippedWeapon.push(weapon);
-	document.getElementById("gameText").innerHTML = "You equip the " + equippedWeapon.name + ".";
+	gameText("You equip the " + equippedWeapon.name + ".");
 
 	equipSound.play();
 	updateInventory();
@@ -968,7 +968,7 @@ function damageMonster(power) {
 	let hit = power - spawnedMonster.defense;
 	if (hit >= spawnedMonster.hp) {
 		//Monster is defeated
-		document.getElementById("gameText").innerHTML = "The " + spawnedMonster.name + randomChoice(phrase.victory) + " with a finishing blow of "+colorize(hit,colorPalette.hpLight,true)+" "+getIcon("hp");
+		gameText("The " + spawnedMonster.name + randomChoice(phrase.victory) + " with a finishing blow of "+colorize(hit,colorPalette.hpLight,true)+" "+getIcon("hp"));
 		let gainedLevel = gainXP(spawnedMonster.hp);
 		spawnedMonster.hp = 0;
 		document.getElementById("monsterLevel").innerHTML = spawnedMonster.hp;
@@ -986,12 +986,12 @@ function damageMonster(power) {
 		gameState = new Wilderness();
 		monsterDeath(gainedLevel);
 	} else if (hit <= 0){
-		document.getElementById("gameText").innerHTML = "You did 0 damage. The "+spawnedMonster.name+" looks at you with indifference";
+		gameText("You did 0 damage. The "+spawnedMonster.name+" looks at you with indifference");
 		gainXP(power);
 	} else {
 		spawnedMonster.hp = spawnedMonster.hp - power;
 		//monster attacks here
-		document.getElementById("gameText").innerHTML = "You hit " + power + " dealing " + colorize(hit+" damage.",colorPalette.hpLight,true);
+		gameText("You hit " + power + " dealing " + colorize(hit+" damage.",colorPalette.hpLight,true));
 		gainXP(power);
 		document.getElementById("monsterLevel").innerHTML = spawnedMonster.hp;
 	};
@@ -1011,11 +1011,11 @@ function flee() {
 				var item = inventory.length - 1;
 				item = Math.random()*item;
 				item = Math.round(item);
-				document.getElementById("gameText").innerHTML = "In your haste, you dropped your " + inventory[item].name;
+				gameText("In your haste, you dropped your " + inventory[item].name);
 				inventory.splice(item, 1);
 				updateInventory();
 			} else {
-				document.getElementById("gameText").innerHTML = "You successfully escape!";
+				gameText("You successfully escape!");
 			};
 			document.getElementById("monster").src = "resources/black.png";
 			document.getElementById("monsterSelector").value = "";
@@ -1058,14 +1058,14 @@ function readyness(ready) {
 };
 
 function clearText() {
-	document.getElementById("gameText").innerHTML = "Make your move.";
+	gameText("Make your move.");
 };
 
 //when Monster dies give XP and reward
 function monsterDeath(gainedLevel=false) {
 	//Clear screen
 	document.getElementById("monster").src = "resources/black.png";
-	//document.getElementById("gameText").innerHTML = "You win!";
+	//gameText("You win!");
 	document.getElementById("monsterSelector").value = "";
 	document.getElementById("monsterHP").innerHTML = 0;
 	document.getElementById("monsterSelector").disabled = false;
@@ -1116,7 +1116,7 @@ function monsterAttack() {
 	miss = (Math.random()*10)*(spawnedMonster.speed / statNumerators.speed);
 	if (miss < 1) {
 		missSound.play();
-		document.getElementById("gameText").innerHTML = "You evade " + spawnedMonster.name + "'s attack";
+		gameText("You evade " + spawnedMonster.name + "'s attack");
 	} else {
 		mAttackSound.play();
 		let hitMin = Math.round(spawnedMonster.strength-spawnedMonster.strength*.5);
@@ -1127,11 +1127,11 @@ function monsterAttack() {
 			death();
 		} else if (hit <= 0) {
 			power =  0;
-			document.getElementById("gameText").innerHTML = spawnedMonster.name + " landed its hit, and in its pathetic weakness it dealt no damage.";
+			gameText(spawnedMonster.name + " landed its hit, and in its pathetic weakness it dealt no damage.");
 			return;
 		} else {
 			statNumerators.hp -= hit;
-			document.getElementById("gameText").innerHTML = spawnedMonster.name + " hit " + power + " dealing "+colorize(hit+" damage.",colorPalette.hpLight,true);
+			gameText(spawnedMonster.name + " hit " + power + " dealing "+colorize(hit+" damage.",colorPalette.hpLight,true));
 			updateStats();
 		};	
 	};
@@ -1289,7 +1289,7 @@ function monsterSelection (selection) {
     if (spawnedMonster.hp < 1) {
     	spawnedMonster.hp = 1;
     };
-	document.getElementById("gameText").innerHTML = "A " + spawnedMonster.name + " appears.";
+	gameText("A " + spawnedMonster.name + " appears.");
 	document.getElementById("monsterSelector").disabled = true;
 	document.getElementById("randomRegion").disabled = true;
 	document.getElementById("randomButton").disabled = true;
@@ -1398,7 +1398,7 @@ function visit(location) {
 		let locationName = randomChoice(adj.names1) + randomChoice(adj.names2);
 		text = text + "the " + locations[location][1] + " " + locationName + ".";
 
-		document.getElementById("gameText").innerHTML = text;
+		gameText(text);
 		//random city pic
 		document.getElementById("monster").src = "resources/" + locations[location][0] + ".png";
 		return;
@@ -1421,7 +1421,7 @@ function visit(location) {
 		n = Math.round(n);
 		text = text + " " + adj.title[n] + ". " + locations[location][2];
 	};
-	document.getElementById("gameText").innerHTML = text;
+	gameText(text);
 
 	//show picture
 	document.getElementById("monster").src = "resources/" + locations[location][0] + ".png";
@@ -1614,7 +1614,7 @@ function sellItem(item, index) {
 	player.money += price;
 	document.getElementById("money").innerHTML = "Money: " + player.money;
 	document.getElementById("merchM").innerHTML = "Money: " + player.money;
-	document.getElementById("gameText").innerHTML = "You sell the " + inventory[index].name + " for " + price + ".";
+	gameText("You sell the " + inventory[index].name + " for " + price + ".");
 	inventory.splice(index,1);
 	updateInventory();
 	updateSellable();

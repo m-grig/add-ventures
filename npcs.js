@@ -46,6 +46,7 @@ var npcData = {
         "hunched {npc} leaning against {ap} staff",
         "{npc} burdened down with the cares of this world",
         "{npc} sitting on {ap} possessions hoarding them to {po}self",
+        "{npc} searching for treasure in this barren world",
         "deceivingly friendly {npc} calling out to you by your first name"
     ]
 };
