@@ -69,6 +69,7 @@ var cookSound3 = new Audio("resources/sound/cook3.wav");
 var cookSound4 = new Audio("resources/sound/cook4.wav");
 var catSound1 = new Audio("resources/sound/meow1.wav");
 var catSound2 = new Audio("resources/sound/meow2.wav");
+var xpLocation = new Audio("resources/sound/xpLocation.wav")
 //Inventory & equipment
 var inventory = [];
 //0-name 0-statUsed 1-power Buff
@@ -477,9 +478,7 @@ class Wilderness { //as you traverse the path
 			getRandomMonster();
 			gameState = new Fighting();
 		} else if (Math.random() > .9) {//8% chance to be in location
-			let i = Math.random()*7;
-			i = Math.round(i);
-			visit(i);
+			visit();
 		} else if (Math.random() >.9){
 			let type = "food";//!
 			let item = Object.assign({}, randomChoice(gameItems[type][0]));
@@ -1429,7 +1428,7 @@ function advance() {
 function explore() {
 	gameState.explore();
 }
-function visit(location) {
+function visit() {
 	var locations = [
 	//0-value & file 1-Name 2-community/text 3-item or not
 	["lib", "Library", "You obtain a mysterious book.", true, "book"],
@@ -1441,18 +1440,19 @@ function visit(location) {
 	["cab", "Cabin", "You leave with a grimy object in hand.", true, ],
 	["tem", "Temple", "You are left with a new sense of meaning.", false,],
 	];
+	let location = randomChoice(locations);
 
 	//Check if location is a city/town
-	if (!locations[location][2]) {
+	if (!location[2]) {
 		gameState = new City();
 		var text = randomChoice(phrase.location);
 
 		let locationName = randomChoice(adj.names1) + randomChoice(adj.names2);
-		text = text + "the " + locations[location][1] + " " + locationName + ".";
+		text = text + "the " + location[1] + " " + locationName + ".";
 
 		gameText(text);
 		//random city pic
-		document.getElementById("monster").src = "resources/" + locations[location][0] + ".png";
+		document.getElementById("monster").src = "resources/" + location[0] + ".png";
 		return;
 	};
 	
@@ -1460,33 +1460,29 @@ function visit(location) {
 	var text = randomChoice(phrase.location);
 	
 	//decide phrasing for location
-	if (Math.random() > .5 || location > 5) {
-		n = Math.random() * (adj.cons.length - 1);
-		n = Math.round(n);
-		text = text + "a" + adj.cons[n] + " " + locations[location][1] + ". " + locations[location][2];
+	if (Math.random() > .5 || ["cab","tem"].includes(location[0])) {
+		text = text + "a" + randomChoice(adj.cons) + " " + location[1] + ". " + location[2];
 	} else {
-		n = Math.random() * (adj.title.length - 1);
-		n = Math.round(n);
-		text = text + "the " + locations[location][1] + " of " + adj.title[n];
-
-		n = Math.random() * (adj.title.length - 1);
-		n = Math.round(n);
-		text = text + " " + adj.title[n] + ". " + locations[location][2];
+		text = text + "the " + location[1] + " of " + randomChoice(adj.title);
+		text = text + " " + randomChoice(adj.title) + ". " + location[2];
 	};
 	gameText(text);
 
 	//show picture
-	document.getElementById("monster").src = "resources/" + locations[location][0] + ".png";
+	document.getElementById("monster").src = "resources/" + location[0] + ".png";
 
-	if (locations[location][3]) {
-		n = Math.random() * 9;
+	if (location[3]) {
+		let n = Math.random() * 9;
 		let item = {name:"Book", type:"book", dunno:n, uses:1, value:15};
 		addItem(item);
 		updateInventory();
 	} else {
 		let i = player.xpNext * .2;
 		i = Math.round(i);
-		gainXP(i);
+		let gainedLevel = gainXP(i);
+		if (!gainedLevel) {
+			xpLocation.play();
+		}
 		document.getElementById("gameText").innerHTML += '<br> Gained '+colorize(i+' xp',colorPalette.levelUp)+'.'
 	};
 };

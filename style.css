@@ -135,9 +135,7 @@
 
 		/* Character and Stats */
 		#classSelection {
-			position: absolute;
-			top: 440px;
-			margin-left: 40px;
+			font-size: 14pt;
 		}
 		#classIcon {
 			position: absolute;
@@ -149,8 +147,8 @@
 		#levelWrapper1 {
 			position: absolute;
 			z-index: 1;
-			margin-left: 35px;
-			top: 450px;
+			margin-left: 40px;
+			top: 410px;
 		}
 		#levelWrapper1 p {
 			margin: 5px;
@@ -158,8 +156,8 @@
 		#levelWrapper2 {
 			position: absolute;
 			z-index: 1;
-			margin-left: 60px;
-			top: 450px;
+			margin-left: 65px;
+			top: 431px;
 			width: 200px;
 		}
 		#levelWrapper2 p {
@@ -397,7 +395,7 @@
 			width:300px;
 			position: absolute;
 			z-index: 1;
-			top: 290px;
+			top: 280px;
 			margin-left: 55px;
 			overflow-wrap: normal;
 			color: lightgray;

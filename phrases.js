@@ -33,8 +33,10 @@ var phrase = {
 		"What is this,",
 		"You've wandered alone for so long that it's almost startling when",
 		"How unexpected,",
+		"As you trudge forward drearily ",
 		"You don't get this every day,",
-		"This is unusual,"
+		"This is unusual,",
+		"As if the day could not get any stranger,"
 	],
 	victory:[
 		" has been defeated",
