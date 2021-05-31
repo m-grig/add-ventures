@@ -16,23 +16,14 @@
 	
 
 	<div id="gameScreen">
-		<div><!-- Monster stats and text -->
-			<p id="monsterText">
-			Lvl:
-			</br>
-			HP:
-			</p>
-			<p id="monsterLevel">1</p>
-			<p id="monsterHP">1</p>
-		</div>
 		<div id="classSelection"></div>
 		<!-- Player level and XP --> 
 		<div id="levelWrapper1">
 			<p>Lvl: </p>
 			<p>XP:</p>
+			<p id="money">Money: 0</p>
 		</div>
 		<div id="levelWrapper2">
-			<p id="money">Money: 0</p>
 			<p id="pLevel">1</p>
 			<p id="xpNow"></p>
 		</div>
@@ -129,53 +120,7 @@
 				<option value="tundra">Tundra</option>
 			</select>
 		</div>
-		<div id="monsterSelection">
-			<label for="monsters">Monster:</label>
-			<br>
-			<div class="select-style">
-				<select name="monsters" id="monsterSelector" onChange="monsterSelection(value)">
-					<option value="">Select Foe</option>
-					<option value="all" disabled>--All--</option>
-						<option value="0,all">Goblin</option>
-						<option value="1,all">Man</option>
-						<option value="2,all">Triplet</option>
-						<option value="3,all">Fink</option>
-						<option value="4,all">Haas</option>
-						<option value="5,all">Punisher</option>
-						<option value="6,all">Heckler</option>
-						<option value="7,all">Hound</option>
-						<option value="8,all">Brute</option>
-						<option value="9,all">Deformed</option>
-						<option value="10,all">Mimic</option>
-						<option value="11,all">Guardian</option>
-						<option value="12,all">Miser</option>
-					<option value="forest" disabled>--Forest--</option>
-						<option value="0,forest">Behemoth</option>
-						<option value="1,forest">Warlord</option>
-						<option value="2,forest">Fungus</option>
-						<option value="3,forest">Faerie</option>
-						<option value="4,forest">Weeping Willow</option>
-						<option value="5,forest">Dwarf</option>
-						<option value="6,forest">Stag</option>
-						<option value="7,forest">Fumigator</option>
-						<option value="8,forest">Highlander</option>
-						<option value="9,forest">Asterlux</option>
-					<option value="coast" disabled>--Coast--</option>
-						<option value="0,coast">Behemoth</option>
-						<option value="1,coast">Warlord</option>
-						<option value="2,coast">Khnum</option>
-						<option value="3,coast">Minotaur</option>
-					<option value="Desert" disabled>--Desert--</option>
-						<option value="0,desert">Behemoth</option>
-						<option value="1,desert">Warlord</option>
-					<option value="Tundra" disabled>--Tundra--</option>
-						<option value="0,tundra">Behemoth</option>
-						<option value="1,tundra">Warlord</option>
-				</select>
-			</div>
-			<img src="resources/threatB.png" id="threatIcon">
-			<br>
-			<button id="randomButton" style="display: none;" onclick="getRandomMonster()">Random</button>
+		<div id="location">
 			<select id="randomRegion" disabled>
 				<option value="" disabled>Region</option>
 				<option value="all">All</option>
@@ -184,6 +129,11 @@
 				<option value="desert">Desert</option>
 				<option value="tundra">Tundra</option>
 			</select>
+		</div>
+		<div id="monsterSelection">
+			<span id="monsterData">
+			</span>
+			<img src="resources/threatB.png" id="threatIcon">
 		</div>
 	</div>
 	
@@ -197,7 +147,7 @@
 	</div>
 	<!-- images -->
 	<div class="enemyWrapper">
-		<img id="monster">	
+			<img id="monster">
 	</div>
 		
 	<div id="classSelectScreen">
@@ -233,7 +183,7 @@
 			<input type="image" value="8" name="crustacean" src="resources/classes/crustacean.png" onmouseover="classDescription(value, name)" onclick="classSelection(name,'Crustacean')">
 			<input type="image" value="9" name="mechanic" src="resources/classes/mechanic.png" onmouseover="classDescription(value, name)" onclick="classSelection(name,'Mechanic')">
 			<input type="image" value="10" name="alchemist" src="resources/classes/alchemist.png" onmouseover="classDescription(value, name)" onclick="classSelection(name,'Alchemist')">
-			<input type="image" value="11" name="nativ" src="resources/classes/niobroran.png" onmouseover="classDescription(value, name)" onclick="classSelection(name,'Niobroran')">
+			<input type="image" value="11" name="niobraran" src="resources/classes/niobraran.png" onmouseover="classDescription(value, name)" onclick="classSelection(name,'Niobraran')">
 		</div>
 	</div>
 	<div id="gameOver">

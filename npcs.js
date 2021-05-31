@@ -8,6 +8,7 @@ var npcData = {
         {name:'Combobulator',gender:'neuter'},
         {name:'Cobbler'},
         {name:'Peasant'},
+        {name:'Landlord'},
         {name:'Milkmaid',gender:'female'},
         {name:'Wandering Salesman'},
         {name:'Skeevy Event Coordinator'},
@@ -43,10 +44,13 @@ var npcData = {
         "blabbering {npc} hobbling around a corner",
         "{npc} talking to {po}self with a hushed whisper",
         "{npc} blabbing to {po}self incoherently",
-        "hunched {npc} leaning against {ap} staff",
+        "hunched over {npc} leaning against {ap} staff",
         "{npc} burdened down with the cares of this world",
         "{npc} sitting on {ap} possessions hoarding them to {po}self",
         "{npc} searching for treasure in this barren world",
+        "{npc} fussing about trivial matters",
+        "{npc} in elegant garb",
+        "disgruntled {npc}",
         "deceivingly friendly {npc} calling out to you by your first name"
     ]
 };

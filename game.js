@@ -76,7 +76,7 @@ var equippedWeapon = {
 	name:"Hands", 
 	attackStat:"strength", 
 	power:1, 
-	buffs:{"speed":1},
+	buffs:{},//"speed":1
 	condition:"unlimited"
 };
 
@@ -96,7 +96,7 @@ var statsAbbreviated = {
 	defense:"def",
 	dedication:"ded",
 	luck:"luc",
-	combo:"str/spd"
+	combo:"mix"//"str/spd"
 };
 // 0-health 1-wisdom 2-diplomacy 3-perception
 // 4-strength 5-agility 6-intelligence 
@@ -315,6 +315,7 @@ var colorPalette = {
 	money:"#E3DC95",//E3C78F
 	dark:"#1B2021",
 	levelUp:"#FFA500",
+	npc: "#8DD6D6",
 	combo: "#B7978A",//weapon colors
 	speed: "#8DB78F",//weapon colors
 	strength: "#8DB7C7",//weapon colors
@@ -483,22 +484,23 @@ class Wilderness { //as you traverse the path
 			let type = "food";//!
 			let item = Object.assign({}, randomChoice(gameItems[type][0]));
 			item.type = type;
+			pickupSound.play();
 			addItem(item);			
 			let text = randomChoice(phrase.obtain) + item.name;
-			pickupSound.play();
 			gameText(text);
 			updateInventory();
 		} else if (Math.random() >.95){
 			let type = "weapon";//!
 			let item = Object.assign({}, randomChoice(gameItems[type][0]));
 			item.type = type;
+			pickupSound.play();
 			addItem(item);			
 			let text = randomChoice(phrase.obtain) + item.name;
-			pickupSound.play();
 			gameText(text);
 			updateInventory();
 		} else if (Math.random() > .6) {//chance to encounter npc
 			let npc = randomChoice(npcData.secondary);
+			npc.name = colorize(npc.name,colorPalette.npc);
 			if (!('gender' in npc)) {
 				npc.gender = randomChoice(['male','female']);
 			}
@@ -515,7 +517,7 @@ class Wilderness { //as you traverse the path
 			gameText(text);
 
 			document.getElementById("monster").src = "resources/encounters/npcSecondary"+randomChoice([1,2,3])+".png";
-
+			clickSound.play();//! eventually change out for an encounter jingle. One for each kind. Item, miniquest, etc
 		} else {
 			clickSound.play();
 			//calculate continue text
@@ -562,6 +564,18 @@ class City { //when you're visiting a museum, library, etc
 	explore() {
 		player.advanceTurn();
 		document.getElementById("exploreButton").innerHTML = "Explore Further";
+	}
+};
+class NpcEvent {
+	constructor() {
+		document.getElementById("attackButton").style.display = "none";
+		document.getElementById("blockButton").style.display = "none";
+		document.getElementById("actionButton").style.display = "inline";
+		document.getElementById("actionButton").innerHTML = "Continue";
+	}
+	continue() {//leave the npc
+		gameState = new Wilderness();
+		document.getElementById("actionButton").innerHTML = "Continue";
 	}
 };
 
@@ -826,12 +840,46 @@ function addItem(item) {
 		inventoryItem.attackStat = attackStatMap[inventoryItem.attackStat];
 		//handle item rarity
 		let rarity = Math.random();
-		if (rarity > .95) {//legendary
+		if (rarity > .99) {//legendary 1%
 			inventoryItem.rarity = "legendary";
-		} else if (rarity > .85) {//historic
+			//legendary must be handled differently.
+		} else if (rarity > .85) {//historic 10%
 			inventoryItem.rarity = "historic";
-		} else if (rarity > .65) {//rare
+			let trait1 = randomChoice(effects.prefix);
+			let trait2 = randomChoice(effects.suffix);
+			inventoryItem.name = trait1.name + inventoryItem.name + trait2.name;
+
+			for (const [key, value] of Object.entries(trait1.boosts)) {
+				if (key in inventoryItem.buffs){
+					inventoryItem.buffs[key] += value;
+				} else {
+					inventoryItem.buffs[key] = value;
+				}
+			}
+			for (const [key, value] of Object.entries(trait2.boosts)) {
+				if (key in inventoryItem.buffs){
+					inventoryItem.buffs[key] += value;
+				} else {
+					inventoryItem.buffs[key] = value;
+				}
+			}
+		} else if (rarity > .65) {//rare 20%
 			inventoryItem.rarity = "rare";
+			let trait;
+			if (Math.random() > .5) {
+				trait = randomChoice(effects.prefix);
+				inventoryItem.name = trait.name + inventoryItem.name;
+			} else {
+				trait = randomChoice(effects.suffix);
+				inventoryItem.name += trait.name;
+			}
+			for (const [key, value] of Object.entries(trait.boosts)) {
+				if (key in inventoryItem.buffs){
+					inventoryItem.buffs[key] += value;
+				} else {
+					inventoryItem.buffs[key] = value;
+				}
+			}
 		}
 	}
 	inventory.push(inventoryItem);
@@ -934,7 +982,7 @@ function equip(weapon) {
 		stats.buff[key] -= value;
 	}
 	//set buffs for new equip
-	for (const [key, value] of Object.entries(equippedWeapon.buffs)) {
+	for (const [key, value] of Object.entries(item.buffs)) {
 		statNumerators[key] += value;
 		stats.buff[key] += value;
 	}
@@ -951,8 +999,17 @@ function equip(weapon) {
 
 	equipSound.play();
 	updateInventory();
+	updateStats();
 	let attackStat = "("+statsAbbreviated[equippedWeapon.attackStat]+")";
-	document.getElementById("equipped").innerHTML = "Equipped: " + equippedWeapon.name+" +"+equippedWeapon.power+" "+attackStat;
+	let text = "Buffs:";
+	for (const [key, value] of Object.entries(equippedWeapon.buffs)) {
+		text+=" "+statsAbbreviated[key]+" +"+value+",";
+	}
+	document.getElementById("equipped").innerHTML = "Equipped: " + equippedWeapon.name+" +"+equippedWeapon.power+" "+attackStat+"<br>";
+	if (text !== "Buffs:") {
+		text = text.replace("+-","-");
+		document.getElementById("equipped").innerHTML += text.slice(0, -1);
+	}
 };
 
 
@@ -971,7 +1028,6 @@ function damageMonster(power) {
 		gameText("The " + spawnedMonster.name + randomChoice(phrase.victory) + " with a finishing blow of "+colorize(hit,colorPalette.hpLight,true)+" "+getIcon("hp"));
 		let gainedLevel = gainXP(spawnedMonster.hp);
 		spawnedMonster.hp = 0;
-		document.getElementById("monsterLevel").innerHTML = spawnedMonster.hp;
 		if (bossBattle) {
 			var n = randomChoice(phrase.cont5);
 			gameText(n);
@@ -982,8 +1038,8 @@ function damageMonster(power) {
 			};
 			bossBattle = false;
 		};
-		document.getElementById("threatIcon").src = "resources/threatB.png"
 		gameState = new Wilderness();
+		despawnMonster();
 		monsterDeath(gainedLevel);
 	} else if (hit <= 0){
 		gameText("You did 0 damage. The "+spawnedMonster.name+" looks at you with indifference");
@@ -993,7 +1049,6 @@ function damageMonster(power) {
 		//monster attacks here
 		gameText("You hit " + power + " dealing " + colorize(hit+" damage.",colorPalette.hpLight,true));
 		gainXP(power);
-		document.getElementById("monsterLevel").innerHTML = spawnedMonster.hp;
 	};
 }
 
@@ -1017,14 +1072,7 @@ function flee() {
 			} else {
 				gameText("You successfully escape!");
 			};
-			document.getElementById("monster").src = "resources/black.png";
-			document.getElementById("monsterSelector").value = "";
-			document.getElementById("monsterLevel").innerHTML = 0;
-			document.getElementById("monsterHP").innerHTML = 0;
-			document.getElementById("monsterSelector").disabled = false;
-			document.getElementById("randomRegion").disabled = false;
-			document.getElementById("randomButton").disabled = false;
-			document.getElementById("threatIcon").src = "resources/threatB.png";
+			despawnMonster();
 			readyness(false);
 			gameState = new Wilderness;
 		} else {
@@ -1035,6 +1083,12 @@ function flee() {
 	};
 	
 };
+function despawnMonster() {
+	document.getElementById("threatIcon").style.visibility = "hidden";
+	document.getElementById("monster").src = "resources/black.png";
+	document.getElementById("monsterData").innerHTML = "";
+	document.getElementById("threatIcon").src = "resources/threatB.png";
+}
 function death() {
 	document.getElementById("gameOver").style.visibility = 'visible';
 	document.getElementById("gameScreen").style.visibility = 'hidden';
@@ -1063,14 +1117,8 @@ function clearText() {
 
 //when Monster dies give XP and reward
 function monsterDeath(gainedLevel=false) {
-	//Clear screen
-	document.getElementById("monster").src = "resources/black.png";
 	//gameText("You win!");
-	document.getElementById("monsterSelector").value = "";
-	document.getElementById("monsterHP").innerHTML = 0;
-	document.getElementById("monsterSelector").disabled = false;
 	document.getElementById("randomRegion").disabled = false;
-	document.getElementById("randomButton").disabled = false;
 	inBattle = false;
 	if (!gainedLevel) {
 		winSound.play();
@@ -1290,12 +1338,18 @@ function monsterSelection (selection) {
     	spawnedMonster.hp = 1;
     };
 	gameText("A " + spawnedMonster.name + " appears.");
-	document.getElementById("monsterSelector").disabled = true;
+
+	let nameSplit = spawnedMonster.name.split(" ");
+	let nameUpper = "";
+	nameSplit.forEach(word => {
+		nameUpper += word[0].toUpperCase()+word.slice(1, word.length)+" ";
+	});
+
+	document.getElementById("monsterData").innerHTML = "<label style=\"font-size: 16pt;\">"+nameUpper+"</label>";
+	document.getElementById("monsterData").innerHTML += "<br>Level: "+spawnedMonster.level+"<br>HP: "+spawnedMonster.hp+"<br>Strength: "+spawnedMonster.strength+"<br>Defense: "+spawnedMonster.defense;
+
 	document.getElementById("randomRegion").disabled = true;
-	document.getElementById("randomButton").disabled = true;
 
-
-	document.getElementById("monsterHP").innerHTML = spawnedMonster.level;
 	if (spawnedMonster.level < player.level) {
 		document.getElementById("threatIcon").src = "resources/threatG.png";
 	} else if (spawnedMonster.level < player.level * 1.5) {
@@ -1303,7 +1357,7 @@ function monsterSelection (selection) {
 	} else {
 		document.getElementById("threatIcon").src = "resources/threatR.png";
 	};
-	document.getElementById("monsterLevel").innerHTML = spawnedMonster.hp;
+	document.getElementById("threatIcon").style.visibility = "visible"; 
 	readyness(true);
 	inBattle = true;
 
@@ -1364,10 +1418,8 @@ function getRandomMonster() {
 		monsterCumWeight += monsterForLevel[i][2];
 		if (random < monsterCumWeight) {
 			index = [i,region];
-			document.getElementById("monsterSelector").value = i;
 			monsterSelection(index);
 			return;
-			//document.getElementById("monsterSelector").value = "monster"
 		}
 	}
 };

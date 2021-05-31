@@ -71,11 +71,11 @@ var gameItems = {
 	weapon: [ 
 		[//lvls 1-15
 	//Daggers
-		{name: "Shank",			level:1,	attackStat:5,	power:1,	value:4, 	buffs:{}},
-		{name: "Stone Dagger",	level:1,	attackStat:4,	power:1,	value:12, 	buffs:{}},
-		{name: "Butter Knife",	level:1,	attackStat:6,	power:1,	value:5, 	buffs:{}},
-		{name: "Rusty Dagger",	level:1,	attackStat:4,	power:1,	value:15, 	buffs:{}},
-		{name: "Smooth Tusk",	level:1,	attackStat:6,	power:2,	value:33, 	buffs:{diplomacy:1}},
+		{name: "Shank",			level:1,	attackStat:5,	power:1,	value:4, 	buffs:{speed:1}},
+		{name: "Stone Dagger",	level:1,	attackStat:4,	power:1,	value:12, 	buffs:{speed:1}},
+		{name: "Butter Knife",	level:1,	attackStat:6,	power:1,	value:5, 	buffs:{speed:1}},
+		{name: "Rusty Dagger",	level:1,	attackStat:4,	power:1,	value:15, 	buffs:{speed:1}},
+		{name: "Smooth Tusk",	level:1,	attackStat:6,	power:2,	value:33, 	buffs:{speed:1,diplomacy:1}},
 	//Swords
 		{name: "Corroded Shortsword",level:1,attackStat:6,	power:2,	value:22, 	buffs:{}},
 		{name: "Akinaka",		level:1,	attackStat:6,	power:3,	value:40, 	buffs:{}},
@@ -83,9 +83,10 @@ var gameItems = {
 	//Blunt
 		{name: "Club",			level:1,	attackStat:4,	power:4,	value:17, 	buffs:{speed:-1}},
 		{name: "Heavy Rock",	level:1,	attackStat:4,	power:3,	value:2, 	buffs:{speed:-1}},
+		{name: "Cudgel",		level:1,	attackStat:6,	power:4,	value:10, 	buffs:{speed:-1}},
 		{name: "Boot on Stick",	level:1,	attackStat:4,	power:15,	value:1, 	buffs:{strength:1,speed:-1}},//make most powerful lvl1 weapon
 	//Pole Weapon
-		{name: "Staff",			level:1,	attackStat:4,	power:3,	value:12, 	buffs:{}},
+		{name: "Staff",			level:1,	attackStat:4,	power:3,	value:12, 	buffs:{defense:1}},
 	//Ranged
 		{name: "Rocks",			level:1,	attackStat:5,	power:1,	value:3, 	buffs:{}},
 		{name: "Darts",			level:1,	attackStat:5,	power:2,	value:13, 	buffs:{}},
@@ -229,18 +230,45 @@ var gameItems = {
 };
 
 
-var effects = [
-	{suffix: " of Sparkle"},
-	{suffix: " Grandiose"},
-	{suffix: " De Magnifique"},
-	{prefix: "Harriot's "},
-	{prefix: "Kamakazie "},
-	{prefix: "Shocking"},
-	{prefix: "Chilling"}
-
-];
-
-
+var effects = {
+	//special items only have prefix or suffix, rare items have both or one and a special name, 
+	//historic and legendary items have custom name
+	prefix: [
+		{name:"Sparkling ", boosts:{intelligence:1}},
+		{name: "Felix's ", boosts:{diplomacy:1}},
+		{name: "Harkening ",boosts:{speed:2}},
+		{name: "Graceful ",boosts:{speed:1}},
+		{name: "Fortifying ", boosts:{health:5}},
+		{name: "Harriot's ", boosts:{dedication:2}},
+		{name: "Kamakazie ", boosts:{health:-5,strength:4,speed:4}},
+		{name: "Shocking", boosts:{speed:1}},
+		{name: "Fortune's ", boosts:{luck:1}},
+	],
+	suffix: [
+		{name: " Grandiose", boosts:{}},
+		{name: " of Lightness", boosts:{speed:2}},
+		{name: " of Shadows", boosts:{dedication:-2,speed:1,intelligence:1}},
+		{name: " of Quickening", boosts:{speed:2,luck:1,diplomacy:1,strength:-1}},
+		{name: " a La Mode", boosts:{speed:-1,defense:1,intelligence:1}},//al dente, a la carte, au gratin, am I hungry or something?
+		{name: " of Burden", boosts:{speed:-2,strength:2,defense:2}},
+		{name: " De Magnifique", boosts:{diplomacy:1,intelligence:1}},
+		{name: " of Resolve", boosts:{dedication:3}}
+	],
+	name: [
+		{name:"Bane", boosts:{strength:2}}
+	]
+};
+/*
+health
+diplomacy
+intelligence
+speed
+strength
+defense
+dedication
+luck
+combo
+*/
 /*Extra weapons
 Ji: chinese pole-dagger
 Dory: hoplite wide blade Spear*/

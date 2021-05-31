@@ -41,12 +41,6 @@
 		}
 
 /*Dropdown menu look*/
-		.select-style {
-			border: 1px solid #ccc;
-			width: 90px;
-			overflow: hidden;
-			background: #fafafa url("resources/icon-select.png") no-repeat 98% 50%;
-		}
 		.select-style select {
 			padding: 5px 8px;
 			width: 130%;
@@ -73,10 +67,23 @@
 			width: 450px;
 		}
 		.enemyWrapper {
+			position: absolute;
+			top: 65px;
 			text-align: center;
-			margin-left: auto;
-			margin-right: auto;
+			/*margin-left: auto;
+			margin-right: auto;*/
+			margin-left: 10%;
 			width: 80%;
+			display: inline;
+			text-align: center;
+		}
+		#monster {
+			z-index: 1;
+			width: 20%;
+			min-width: 225px;
+		}
+		#monsterData {
+			text-align: right;
 		}
 		.icon {
 			vertical-align: middle;
@@ -101,34 +108,8 @@
 			margin-left: 0;
 			margin-right: 0;
 		}
-		
 
 		/* Monsters */
-		#monster {
-			position: absolute;
-			z-index: 1;
-			width: 20%;
-			min-width: 225px;
-			top: 65px;
-		}
-		#monsterText {
-			position: absolute;
-			z-index: 1;
-			top: 10px;
-			margin-left: 190px;
-		}
-		#monsterLevel {
-			position: absolute;
-			z-index: 1;
-			top: 27px;
-			margin-left: 220px;
-		}
-		#monsterHP {
-			position: absolute;
-			z-index: 1;
-			top: 10px;
-			margin-left: 220px;
-		}
 		#monsterSelection {
 			position: absolute;
 			top: 20px;
@@ -139,9 +120,17 @@
 			float: left;
 		}
 		#threatIcon {
+			visibility: hidden;
+			position: absolute;
+			top: 0px;
 			width: 32px;
+			margin-left: 40%;
+		}
+		#location {
 			float: right;
-			margin-left: 0px;
+		}
+		#randomRegion {
+			font-size: 18pt;
 		}
 
 		/* Character and Stats */
@@ -202,7 +191,6 @@
 		}
 		#money {
 			margin-bottom: 10px;
-			float: right;
 		}
 				/*Game Actions*/
 		#actionSpan {
