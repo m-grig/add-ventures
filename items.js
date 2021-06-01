@@ -241,8 +241,10 @@ var effects = {
 		{name: "Fortifying ", boosts:{health:5}},
 		{name: "Harriot's ", boosts:{dedication:2}},
 		{name: "Kamakazie ", boosts:{health:-5,strength:4,speed:4}},
-		{name: "Shocking", boosts:{speed:1}},
-		{name: "Fortune's ", boosts:{luck:1}},
+		{name: "Shocking ", boosts:{speed:1}},
+		{name: "Fortune's ", boosts:{luck:2}},
+		{name: "Refined ", boosts:{diplomacy:1}},
+		{name: "Gilded ", boosts:{diplomacy:1,luck:1}},
 	],
 	suffix: [
 		{name: " Grandiose", boosts:{}},
@@ -252,7 +254,8 @@ var effects = {
 		{name: " a La Mode", boosts:{speed:-1,defense:1,intelligence:1}},//al dente, a la carte, au gratin, am I hungry or something?
 		{name: " of Burden", boosts:{speed:-2,strength:2,defense:2}},
 		{name: " De Magnifique", boosts:{diplomacy:1,intelligence:1}},
-		{name: " of Resolve", boosts:{dedication:3}}
+		{name: " of Resolve", boosts:{dedication:3}},
+		{name: " of Glibness", boosts:{diplomacy:2}}
 	],
 	name: [
 		{name:"Bane", boosts:{strength:2}}

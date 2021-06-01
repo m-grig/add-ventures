@@ -322,10 +322,10 @@ var colorPalette = {
 	strength: "#8DB7C7",//weapon colors
 	hpDark: "#750F0F",
 	hpLight: "#A62B2B",//for attacks
-	standard: "#FFFFFF",//nothing special weapon
-	rare: "#9EC8FF",//blue
-	historic: "#8D7AD6",//purple 572AB0
-	legendary: "#FFC787"//orange
+	standard: {main:"#FFFFFF",light:"#FFFFFF"},//nothing special weapon
+	rare: {main:"#66A8FF",light:"#9EC8FF"},//blue
+	historic: {main:"#8161FF",light:"#977DFF"},//purple 572AB0
+	legendary: {main:"#FF9F30",light:"#FFBF75"}//orange
 }
 
 var monsters = {
@@ -474,6 +474,7 @@ class Wilderness { //as you traverse the path
 			return;
 		};
 
+
 		if (Math.random() > .8) {//20% chance to run into monster
 			getRandomMonster();
 			gameState = new Fighting();
@@ -517,7 +518,8 @@ class Wilderness { //as you traverse the path
 
 			document.getElementById("monster").src = "resources/encounters/npcSecondary"+randomChoice([1,2,3])+".png";
 			clickSound.play();//! eventually change out for an encounter jingle. One for each kind. Item, miniquest, etc
-		} else {
+		} else {// nothing happens
+			document.getElementById("monster").src = "resources/black.png";
 			clickSound.play();
 			//calculate continue text
 			if (bossCount > 5) {
@@ -802,7 +804,13 @@ function updateInventory() {
 			} else {
 				button.style.background = "#8DB7C7"; 
 			};*/
-			button.style.background = colorPalette[item.rarity];
+			if (!item.rarity || item.rarity === "standard") {
+				button.style.background = colorPalette.standard
+			} else {
+				console.log(item.rarity);
+				button.style.background = "radial-gradient("+colorPalette[item.rarity].light+","+colorPalette[item.rarity].main+")";
+			}
+			
 			button.innerHTML += "<br>Power: "+item.power+" "+getIcon(item.attackStat);
 		} else if (item.type === "food") {
 			console.log("food",item)
@@ -830,7 +838,7 @@ function updateInventory() {
 	//var item = Array.from(gameItems[food1][0]);
 };
 
-function addItem(item) {	
+function addItem(item, rarity=undefined) {	
 	let inventoryItem = Object.assign({}, item);
 	if (inventoryItem.type === "food") {
 		inventoryItem.spoil = Math.round(Math.random()*10+5);
@@ -838,11 +846,13 @@ function addItem(item) {
 		let attackStatMap = {4:"strength",5:"speed",6:"combo"};
 		inventoryItem.attackStat = attackStatMap[inventoryItem.attackStat];
 		//handle item rarity
-		let rarity = Math.random();
-		if (rarity > .99) {//legendary 1%
+		if (!rarity) {
+			rarity = Math.random();
+		}
+		if (rarity > .99 || rarity === "legendary") {//legendary 1%
 			inventoryItem.rarity = "legendary";
 			//legendary must be handled differently.
-		} else if (rarity > .85) {//historic 10%
+		} else if (rarity > .85 || rarity === "historic") {//historic 10%
 			inventoryItem.rarity = "historic";
 			let trait1 = randomChoice(effects.prefix);
 			let trait2 = randomChoice(effects.suffix);
@@ -862,7 +872,7 @@ function addItem(item) {
 					inventoryItem.buffs[key] = value;
 				}
 			}
-		} else if (rarity > .65) {//rare 20%
+		} else if (rarity > .65 || rarity === "rare") {//rare 20%
 			inventoryItem.rarity = "rare";
 			let trait;
 			if (Math.random() > .5) {
@@ -1038,8 +1048,8 @@ function damageMonster(power) {
 			bossBattle = false;
 		};
 		gameState = new Wilderness();
-		despawnMonster();
 		monsterDeath(gainedLevel);
+		despawnMonster();
 	} else if (hit <= 0){
 		gameText("You did 0 damage. The "+spawnedMonster.name+" looks at you with indifference");
 		gainXP(power);
@@ -1048,7 +1058,8 @@ function damageMonster(power) {
 		//monster attacks here
 		gameText("You hit " + power + " dealing " + colorize(hit+" damage.",colorPalette.hpLight,true));
 		gainXP(power);
-	};
+		updateMonster();
+	}
 }
 
 
@@ -1071,9 +1082,9 @@ function flee() {
 			} else {
 				gameText("You successfully escape!");
 			};
-			despawnMonster();
 			readyness(false);
 			gameState = new Wilderness;
+			despawnMonster();
 		} else {
 			alert("You can't do that right now");
 		};
@@ -1135,20 +1146,18 @@ function monsterDeath(gainedLevel=false) {
 			if (itemLevel > 5) {
 				itemLevel = 5;
 			};
-			itemLevel = Math.ceil(itemLevel);
-			let index = Math.round(Math.random()*(gameItems[type][itemLevel].length-1));
-			item = Object.assign({}, gameItems[type][itemLevel][index]);
+			itemLevel = Math.floor(itemLevel);
+			item = Object.assign({}, randomChoice(gameItems[type][itemLevel]));
 			item.type = type;
 			addItem(item);
 		} else {
 		//Food
 			let type = "food";
-			let itemLevel = Math.ceil(Math.random()*3*(player.level/50));
+			let itemLevel = Math.floor(Math.random()*3*(player.level/50));
 			if (itemLevel > 5) {
 				itemLevel = 5;
 			}
-			let index = Math.round(Math.random()*(gameItems[type][itemLevel].length-1));
-			item = Object.assign({}, gameItems[type][itemLevel][index]);
+			item = Object.assign({}, randomChoice(gameItems[type][itemLevel]));
 			item.type = type;
 			addItem(item);
 		};
@@ -1338,15 +1347,7 @@ function monsterSelection (selection) {
     };
 	gameText("A " + spawnedMonster.name + " appears.");
 
-	let nameSplit = spawnedMonster.name.split(" ");
-	let nameUpper = "";
-	nameSplit.forEach(word => {
-		nameUpper += word[0].toUpperCase()+word.slice(1, word.length)+" ";
-	});
-
-	document.getElementById("monsterData").innerHTML = "<label style=\"font-size: 16pt;\">"+nameUpper+"</label>";
-	document.getElementById("monsterData").innerHTML += "<br>Level: "+spawnedMonster.level+"<br>HP: "+spawnedMonster.hp+"<br>Strength: "+spawnedMonster.strength+"<br>Defense: "+spawnedMonster.defense;
-
+	updateMonster();
 	document.getElementById("randomRegion").disabled = true;
 
 	if (spawnedMonster.level < player.level) {
@@ -1422,6 +1423,15 @@ function getRandomMonster() {
 		}
 	}
 };
+function updateMonster() {
+	let nameSplit = spawnedMonster.name.split(" ");
+	let nameUpper = "";
+	nameSplit.forEach(word => {
+		nameUpper += word[0].toUpperCase()+word.slice(1, word.length)+" ";
+	});
+	document.getElementById("monsterData").innerHTML = "<label style=\"font-size: 16pt;\">"+nameUpper+"</label>";
+	document.getElementById("monsterData").innerHTML += "<br>Level: "+spawnedMonster.level+"<br>HP: "+spawnedMonster.hp+"<br>Strength: "+spawnedMonster.strength+"<br>Defense: "+spawnedMonster.defense+"<br>Speed: "+spawnedMonster.speed;
+}
 function advance() {
 	gameState.continue();
 };
