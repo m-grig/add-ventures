@@ -13,9 +13,8 @@
 </head>
 
 <body id="screen" onload="titleTheme()">
-	
-
 	<div id="gameScreen">
+		<span id="sceneTitle"></span>
 		<!-- Player level and XP --> 
 		<div id="levelWrapper1">
 			<div id="classSelection"></div>
@@ -130,10 +129,16 @@
 				<option value="tundra">Tundra</option>
 			</select>
 		</div>
-		<div id="monsterSelection">
-			<span id="monsterData">
+
+		<!-- images -->
+		<div id="enemyWrapper">
+			<span id="monsterSelection">
+				<span id="monsterData">
+				</span>
 			</span>
-			<img src="resources/threatB.png" id="threatIcon">
+			<span>
+				<img id="monster">
+			</span>
 		</div>
 	</div>
 	
@@ -144,10 +149,6 @@
 			<br>
 			<input type="image" src="resources/newGameButton.png" onclick="newGame()">
 			<input type="image" src="resources/loadButton.png" onclick="load()">
-	</div>
-	<!-- images -->
-	<div class="enemyWrapper">
-			<img id="monster">
 	</div>
 		
 	<div id="classSelectScreen">

@@ -245,6 +245,7 @@ var effects = {
 		{name: "Fortune's ", boosts:{luck:2}},
 		{name: "Refined ", boosts:{diplomacy:1}},
 		{name: "Gilded ", boosts:{diplomacy:1,luck:1}},
+		{name: "The Klutz's ", boosts:{diplomacy:1,luck:-4}},
 	],
 	suffix: [
 		{name: " Grandiose", boosts:{}},
@@ -255,6 +256,7 @@ var effects = {
 		{name: " of Burden", boosts:{speed:-2,strength:2,defense:2}},
 		{name: " De Magnifique", boosts:{diplomacy:1,intelligence:1}},
 		{name: " of Resolve", boosts:{dedication:3}},
+		{name: " of Suffering", boosts:{dedication:-2,diplomacy:-2,luck:-1,strength:2,speed:1}},
 		{name: " of Glibness", boosts:{diplomacy:2}}
 	],
 	name: [

@@ -36,8 +36,9 @@ var bossCount = 25;
 var bossBattle = false;
 var merchInv = [];
 var catName = "";
-var coordinates = [15,47,""]; //N-S, E-W, Compass
+var coordinates = {x:47,y:15,compass:"",location:""}; //N-S, E-W, Compass
 var partySize = 1;
+var habitat = ["Meadow","Swamp","Forest","Deep Tundra","Mountain Range","Desert"];
 
 var gameState;
 //Sound effects
@@ -313,6 +314,7 @@ var spawnedMonster = {
 };
 
 var colorPalette = {
+	green:"#00B303",
 	money:"#E3DC95",//E3C78F
 	dark:"#1B2021",
 	levelUp:"#FFA500",
@@ -321,7 +323,7 @@ var colorPalette = {
 	speed: "#8DB78F",//weapon colors
 	strength: "#8DB7C7",//weapon colors
 	hpDark: "#750F0F",
-	hpLight: "#A62B2B",//for attacks
+	hpLight: "#C23232",//for attacks
 	standard: {main:"#FFFFFF",light:"#FFFFFF"},//nothing special weapon
 	rare: {main:"#66A8FF",light:"#9EC8FF"},//blue
 	historic: {main:"#8161FF",light:"#977DFF"},//purple 572AB0
@@ -378,20 +380,7 @@ var monsters = {
 //stateful game states
 class Fighting { //in battle
 	constructor() {
-		this.hitChance = Math.round((statNumerators.speed / spawnedMonster.speed)*90);
-		if (this.hitChance > 100) {
-			this.hitChance = 100;
-		}
-		this.dodgeChance = Math.round((spawnedMonster.speed / statNumerators.speed)*90);
-		if (this.dodgeChance > 100) {
-			this.dodgeChance = 100;
-		}
-		this.dodgeChance = 100-this.dodgeChance;
-
-		this.fleeChance = Math.round((statNumerators.speed/spawnedMonster.speed)*80);
-		if (this.fleeChance > 100) {
-			this.fleeChance = 100;
-		}
+		this.setChances();
 		if (statNumerators.speed > spawnedMonster.speed) {
 			this.setAttack();
 		} else {
@@ -399,6 +388,7 @@ class Fighting { //in battle
 		};
 		document.getElementById("actionButton").innerHTML = "FLEE "+getIcon("speed")+"<br>"+this.fleeChance+"%";
 		document.getElementById("actionButton").style.display = "inline";
+		document.getElementById("monsterSelection").style.visibility = "visible";
 	}
 	continue() {//flee
 		flee();
@@ -448,13 +438,31 @@ class Fighting { //in battle
 		this.setAttack();
 		monsterAttack();
 	}
+	setChances() {
+		this.hitChance = Math.round((statNumerators.speed / spawnedMonster.speed)*90);
+		if (this.hitChance > 100) {
+			this.hitChance = 100;
+		}
+		this.dodgeChance = Math.round((spawnedMonster.speed / statNumerators.speed)*90);
+		if (this.dodgeChance > 100) {
+			this.dodgeChance = 100;
+		}
+		this.dodgeChance = 100-this.dodgeChance;
+
+		this.fleeChance = Math.round((statNumerators.speed/spawnedMonster.speed)*80);
+		if (this.fleeChance > 100) {
+			this.fleeChance = 100;
+		}
+	}
 };
 class Wilderness { //as you traverse the path
 	constructor() {
 		document.getElementById("attackButton").style.display = "none";
 		document.getElementById("blockButton").style.display = "none";
+		document.getElementById("exploreButton").style.display = "none";
 		document.getElementById("actionButton").style.display = "inline";
 		document.getElementById("actionButton").innerHTML = "Continue";
+		document.getElementById("sceneTitle").innerHTML = coordinates.location;
 	}
 	continue() {
 		player.advanceTurn();
@@ -516,10 +524,10 @@ class Wilderness { //as you traverse the path
 			let text = randomChoice(phrase.meetNpc)+" you "+randomChoice(phrase.encounter)+introText+'.';
 			gameText(text);
 
-			document.getElementById("monster").src = "resources/encounters/npcSecondary"+randomChoice([1,2,3])+".png";
+			displayImage("resources/encounters/npcSecondary"+randomChoice([1,2,3])+".png");
 			clickSound.play();//! eventually change out for an encounter jingle. One for each kind. Item, miniquest, etc
 		} else {// nothing happens
-			document.getElementById("monster").src = "resources/black.png";
+			displayImage("resources/locations/"+coordinates.location+".png");
 			clickSound.play();
 			//calculate continue text
 			if (bossCount > 5) {
@@ -560,7 +568,6 @@ class City { //when you're visiting a museum, library, etc
 		gameState = new Wilderness();
 		document.getElementById("cityScreen").style.visibility = 'hidden';
 		document.getElementById("actionButton").innerHTML = "Continue";
-		document.getElementById("exploreButton").style.display = "none";
 	}
 	explore() {
 		player.advanceTurn();
@@ -579,6 +586,53 @@ class NpcEvent {
 		document.getElementById("actionButton").innerHTML = "Continue";
 	}
 };
+class StartSequence {
+	constructor() {
+		document.getElementById("actionButton").style.display = "inline";
+		document.getElementById("actionButton").innerHTML = "Continue";
+		coordinates.location = randomChoice(habitat);
+		this.step = 0
+		this.story = [
+			{text:"You awaken in darkness surrounded by water.", image:"resources/black.png"},
+			{text:"As you look up, you see a light and begin to swim toward it", image:"resources/underwater.png"},
+			{text:"You burst through the surface and gasp for air. As your eyes adjust to the light, you look around to see the shimmering waters of a crystal pool in the middle of a "+coordinates.location, image:"resources/locations/"+coordinates.location+".png"},
+			{text:"What will you do?", image:"resources/locations/"+coordinates.location+".png"},
+			{text:"You swim to shore and begin your journey.", image:"resources/locations/"+coordinates.location+".png"}
+		]
+	}
+	continue() {
+		clickSound.play();
+		if (this.step === this.story.length - 2) {//second to last step
+			this.setLeave()
+		} 
+		if (this.step === this.story.length - 1) {
+			if (Math.random() < .1) {
+				//fail
+				document.getElementById("exploreButton").style.display = "none";
+				document.getElementById("actionButton").innerHTML = "Continue";
+				gameText("As you try to swim to the shore, you realize you don't know how to swim. You sputter ")
+			} else {
+				gameText(this.story[this.step].text);
+				gameState = new Wilderness();
+			}
+		} else {
+			gameText(this.story[this.step].text);
+			displayImage(this.story[this.step].image);
+			this.step ++;
+		}	
+	}
+	setLeave() {
+		document.getElementById("actionButton").style.display = "inline";
+		document.getElementById("actionButton").innerHTML = "Swim to Shore";
+		document.getElementById("exploreButton").style.display = "inline";
+		document.getElementById("exploreButton").innerHTML = "Stay in Pond";
+	}
+	explore() {
+	}
+	die() {
+		death();
+	}
+}
 
 function titleTheme() {
 	songSound.loop = true;
@@ -592,7 +646,7 @@ function newGame() {
 	document.getElementById("classSelectScreen").style.visibility = "visible";
 	songSound.pause();
 	updateBuyable();
-	gameState = new Wilderness();
+	gameState = new StartSequence();
 	var n = Math.random() * (adj.names1.length - 1);
 	n = Math.round(n);
 	catName = adj.names1[n] + "ester";
@@ -607,10 +661,10 @@ function load() {
 
 		var saveLoad = localStorage.getItem("gameSave.txt").split(",");
 		//Location before class selection
-		coordinates[0] = parseInt(saveLoad[9]);
-		coordinates[1] = parseInt(saveLoad[10]);
-		coordinates[2] = saveLoad[11];
-		document.getElementById("compass").value = coordinates[2];
+		coordinates.y = parseInt(saveLoad[9]);
+		coordinates.x = parseInt(saveLoad[10]);
+		coordinates.compass = saveLoad[11];
+		document.getElementById("compass").value = coordinates.compass;
 
 		classSelection(saveLoad[0], saveLoad[6]);
 		player.level = parseInt(saveLoad[1]);
@@ -657,8 +711,8 @@ function load() {
 		if (statDenominators.intelligence > 49) {
 			document.getElementById("compass").disabled = false;
 		};
-		document.getElementById("position").style.marginLeft = -coordinates[1]*2 + "px";
-		document.getElementById("position").style.top = coordinates[0]*2 + "px";
+		document.getElementById("position").style.marginLeft = -coordinates.x*2 + "px";
+		document.getElementById("position").style.top = coordinates.y*2 + "px";
 	} else {
 		alert("Save doesn't exist");
 	};
@@ -679,9 +733,9 @@ function save() {
 		saveData[6] = player.class;
 		saveData[7] = player.renown;
 		saveData[8] = catName;
-		saveData[9] = coordinates[0];
-		saveData[10] = coordinates[1];
-		saveData[11] = coordinates[2];
+		saveData[9] = coordinates.y;
+		saveData[10] = coordinates.x;
+		saveData[11] = coordinates.compass;
 		saveData[12] = bossCount;
 		localStorage.setItem("gameSave.txt", saveData);
 
@@ -1094,10 +1148,9 @@ function flee() {
 	
 };
 function despawnMonster() {
-	document.getElementById("threatIcon").style.visibility = "hidden";
-	document.getElementById("monster").src = "resources/black.png";
+	document.getElementById("monsterSelection").style.visibility = "hidden";
+	displayImage("resources/black.png");
 	document.getElementById("monsterData").innerHTML = "";
-	document.getElementById("threatIcon").src = "resources/threatB.png";
 }
 function death() {
 	document.getElementById("gameOver").style.visibility = 'visible';
@@ -1330,7 +1383,7 @@ function monsterSelection (selection) {
 	//Serve image and text
 	index = selection[0];
 	mClass = selection[1];
-	document.getElementById("monster").src = "resources/monsters/" + mClass + index + ".png";
+	displayImage("resources/monsters/" + mClass + index + ".png");
 	let monSpawner = Array.from(monsters[mClass][index]);
 	spawnedMonster.name = monSpawner[0];
 	//monster level and stats 
@@ -1349,15 +1402,6 @@ function monsterSelection (selection) {
 
 	updateMonster();
 	document.getElementById("randomRegion").disabled = true;
-
-	if (spawnedMonster.level < player.level) {
-		document.getElementById("threatIcon").src = "resources/threatG.png";
-	} else if (spawnedMonster.level < player.level * 1.5) {
-		document.getElementById("threatIcon").src = "resources/threatY.png";
-	} else {
-		document.getElementById("threatIcon").src = "resources/threatR.png";
-	};
-	document.getElementById("threatIcon").style.visibility = "visible"; 
 	readyness(true);
 	inBattle = true;
 
@@ -1429,8 +1473,17 @@ function updateMonster() {
 	nameSplit.forEach(word => {
 		nameUpper += word[0].toUpperCase()+word.slice(1, word.length)+" ";
 	});
-	document.getElementById("monsterData").innerHTML = "<label style=\"font-size: 16pt;\">"+nameUpper+"</label>";
-	document.getElementById("monsterData").innerHTML += "<br>Level: "+spawnedMonster.level+"<br>HP: "+spawnedMonster.hp+"<br>Strength: "+spawnedMonster.strength+"<br>Defense: "+spawnedMonster.defense+"<br>Speed: "+spawnedMonster.speed;
+	let color;
+	if (spawnedMonster.level < player.level * .75) {
+		color = colorPalette.green;
+	} else if (spawnedMonster.level < player.level * 1.5) {
+		color = colorPalette.standard;
+	} else {
+		color = colorPalette.hpLight;
+	};
+
+	document.getElementById("monsterData").innerHTML = "<label style=\"font-size: 16pt; color\">"+nameUpper+"</label>";
+	document.getElementById("monsterData").innerHTML += "<br>"+colorize("Level: "+spawnedMonster.level,color,true)+"<br>HP: "+spawnedMonster.hp+"<br>Strength: "+spawnedMonster.strength+"<br>Defense: "+spawnedMonster.defense+"<br>Speed: "+spawnedMonster.speed;
 }
 function advance() {
 	gameState.continue();
@@ -1462,7 +1515,7 @@ function visit() {
 
 		gameText(text);
 		//random city pic
-		document.getElementById("monster").src = "resources/" + location[0] + ".png";
+		displayImage("resources/" + location[0] + ".png");
 		return;
 	};
 	
@@ -1479,7 +1532,7 @@ function visit() {
 	gameText(text);
 
 	//show picture
-	document.getElementById("monster").src = "resources/" + location[0] + ".png";
+	displayImage("resources/" + location[0] + ".png");
 
 	if (location[3]) {
 		let n = Math.random() * 9;
@@ -1498,71 +1551,39 @@ function visit() {
 };
 function movePlayer() {//updates player location on the map
 	var l = Math.random();
-	var i = Array.from(coordinates);
+	let previous = Object.assign({}, coordinates);
+
 	if (l <.25) {
-		coordinates[0] += 1;
+		coordinates.y += 1;
 	} else if (l <.5) {
-		coordinates[0] -= 1;
+		coordinates.y -= 1;
 	} else if (l <.75) {
-		coordinates[1] += 1;
+		coordinates.x += 1;
 	} else {
-		coordinates[1] -= 1;
-	};
-
-
-	if (coordinates[2] !== "") {
-		if (coordinates[2] === "forest" && (coordinates[0] > 32 || coordinates[1] < 32)) {
-			coordinates = Array.from(i);
-			if (coordinates[0] > 32) {
-				coordinates[0] -= 1;
-			} else {
-				coordinates[1] += 1;
-			};
-		} else if (coordinates[2] === "coast" && (coordinates[0] < 32 || coordinates[1] > 32)) {
-			coordinates = Array.from(i);
-			if (coordinates[0] < 32) {
-				coordinates[0] += 1;
-			} else {
-				coordinates[1] -= 1;
-			};
-		} else if (coordinates[2] === "desert" && (coordinates[0] < 32 || coordinates[1] < 32)) {
-			coordinates = Array.from(i);
-			if (coordinates[0] < 32) {
-				coordinates[0] += 1;
-			} else {
-				coordinates[1] += 1;
-			};
-		} else if (coordinates[2] === "tundra" && (coordinates[0] > 32 || coordinates[1] > 32)) {
-			coordinates = Array.from(i);
-			if (coordinates[0] > 32) {
-				coordinates[0] -= 1;
-			} else {
-				coordinates[1] -= 1;
-			};
-		};
-	};
+		coordinates.x -= 1;
+	}
 
 	//keep player within bounds
-	if (coordinates[0] < 5 || coordinates[0] > 60 || coordinates[1] < 5 || coordinates[1] > 60) {
-			coordinates = Array.from(i);
-			movePlayer();
+	if (coordinates.y < 5 || coordinates.y > 60 || coordinates.x < 5 || coordinates.x > 60) {
+		coordinates = Object.assign({},previous);
+		movePlayer();//wtf did I just do a recursive call?
 	};
 
 	//set location
-	if (coordinates[0] > 32 && coordinates[1] > 32) {
+	if (coordinates.y > 32 && coordinates.x > 32) {
 		document.getElementById("randomRegion").value = "desert";
-	} else if (coordinates[0] < 32 && coordinates[1] < 32) {
+	} else if (coordinates.y < 32 && coordinates.x < 32) {
 		document.getElementById("randomRegion").value = "tundra";
-	} else if (coordinates[0] > 32 && coordinates[1] < 32) {
+	} else if (coordinates.y > 32 && coordinates.x < 32) {
 		document.getElementById("randomRegion").value = "coast";
-	} else if (coordinates[0] < 32 && coordinates[1] > 32) {
+	} else if (coordinates.y < 32 && coordinates.x > 32) {
 		document.getElementById("randomRegion").value = "forest";
 	};
-	document.getElementById("position").style.marginLeft = -coordinates[1]*2 + "px";
-	document.getElementById("position").style.top = coordinates[0]*2 + "px";
-};
+	document.getElementById("position").style.marginLeft = -coordinates.x*2 + "px";
+	document.getElementById("position").style.top = coordinates.y*2 + "px";
+}
 function setCompass(direction) {
-	coordinates[2] = direction;
+	coordinates.compass = direction;
 };
 
 
@@ -1860,4 +1881,8 @@ function getIcon(filename) {
 function  randomChoice(options) {
 	let i = Math.round(Math.random() * (options.length - 1));
 	return options[i]
+}
+
+function displayImage(path) {
+	document.getElementById("monster").src = path;
 }

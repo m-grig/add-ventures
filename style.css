@@ -66,16 +66,14 @@
 		.wrapper {
 			width: 450px;
 		}
-		.enemyWrapper {
+		/* Monsters */
+		#enemyWrapper {
 			position: absolute;
 			top: 65px;
-			text-align: center;
 			/*margin-left: auto;
 			margin-right: auto;*/
-			margin-left: 10%;
-			width: 80%;
+			width: 60%;
 			display: inline;
-			text-align: center;
 		}
 		#monster {
 			z-index: 1;
@@ -84,7 +82,19 @@
 		}
 		#monsterData {
 			text-align: right;
+			overflow: wrap;
 		}
+		#monsterSelection {
+			width: 10%;
+			float: left;
+			margin-right: 5px;
+			display: inline;
+			overflow: wrap;
+		}
+		#monsterSelection div {
+			float: left;
+		}
+
 		.icon {
 			vertical-align: middle;
 		}
@@ -109,25 +119,16 @@
 			margin-right: 0;
 		}
 
-		/* Monsters */
-		#monsterSelection {
-			position: absolute;
-			top: 20px;
-			margin-left: 40px;
-			display: inline;
-		}
-		#monsterSelection div {
-			float: left;
-		}
-		#threatIcon {
-			visibility: hidden;
-			position: absolute;
-			top: 0px;
-			width: 32px;
-			margin-left: 40%;
-		}
 		#location {
 			float: right;
+		}
+		#sceneTitle {
+			position: absolute;
+			width: 80%;
+			top: 25px;
+			font-size: 16pt;
+			font-weight: bold;
+			text-align: center;
 		}
 		#randomRegion {
 			font-size: 18pt;
@@ -401,6 +402,7 @@
 			color: lightgray;
 		}
 		#gameScreen {
+			width: 80%;
 			visibility: hidden;
 			background-color: black;
 		}
