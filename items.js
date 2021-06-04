@@ -72,7 +72,7 @@ var gameItems = {
 		[//lvls 1-15
 	//Daggers
 		{name: "Shank",			level:1,	attackStat:5,	power:1,	value:4, 	buffs:{speed:1}},
-		{name: "Stone Dagger",	level:1,	attackStat:4,	power:1,	value:12, 	buffs:{speed:1}},
+		{name: "Stone Dagger",	level:1,	attackStat:4,	power:1,	value:12, 	buffs:{speed:1,intelligence:-1,defense:1}},
 		{name: "Butter Knife",	level:1,	attackStat:6,	power:1,	value:5, 	buffs:{speed:1}},
 		{name: "Rusty Dagger",	level:1,	attackStat:4,	power:1,	value:15, 	buffs:{speed:1}},
 		{name: "Smooth Tusk",	level:1,	attackStat:6,	power:2,	value:33, 	buffs:{speed:1,diplomacy:1}},

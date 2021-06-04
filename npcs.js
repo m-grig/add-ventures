@@ -51,6 +51,11 @@ var npcData = {
         "{npc} fussing about trivial matters",
         "{npc} in elegant garb",
         "disgruntled {npc}",
+        "{npc} sitting on a {loc}",
+        "{npc} laying in a {loc}",
+        "{npc} beckoning you to approach {po} from a {loc}",
+        "{npc} observing you from a {loc}",
+        "{npc} enjoying {po}self by a {loc}",
         "deceivingly friendly {npc} calling out to you by your first name"
     ]
 };

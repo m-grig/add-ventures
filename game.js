@@ -109,124 +109,124 @@ var statsAbbreviated = {
 var playerClasses = {
 	paladin: {
 		hp: 3,
-		diplomacy: 0,
-		intelligence: 0,
-		speed: 1,
-		strength: 3,
-		defense: 2,
-		dedication: 3,
-		luck: 0
-	},
-	historian: {
-		hp: 1,
-		diplomacy: 2,
-		intelligence: 3,
-		speed: 2,
-		strength: 0,
-		defense: 0,
-		dedication: 2,
-		luck: 2
-	}, //ability that allows him to flee after an attack
-	ranger: {
-		hp: 1,
 		diplomacy: 1,
-		intelligence: 2,
-		speed: 3,
-		strength: 0,
-		defense: 1,
-		dedication: 1,
-		luck: 3
-	},
-	oaf: {
-		hp: 3,
-		diplomacy: 0,
-		intelligence: 0,
+		intelligence: 1,
 		speed: 1,
 		strength: 3,
-		defense: 2,
-		dedication: 0,
-		luck: 3
-	},
-	cleric: {
-		hp: 1,
-		diplomacy: 2,
-		intelligence: 2,
-		speed: 1,
-		strength: 0,
 		defense: 2,
 		dedication: 3,
 		luck: 1
-	},
-	outlaw: {
+		},
+	historian: {
+		hp: 1,
+		diplomacy: 3,
+		intelligence: 3,
+		speed: 2,
+		strength: 1,
+		defense: 1,
+		dedication: 2,
+		luck: 2
+		},
+	ranger: {
+		hp: 1,
+		diplomacy: 2,
+		intelligence: 2,
+		speed: 3,
+		strength: 1,
+		defense: 2,
+		dedication: 1,
+		luck: 3
+		},
+	oaf: {
+		hp: 3,
+		diplomacy: 1,
+		intelligence: 1,
+		speed: 1,
+		strength: 3,
+		defense: 2,
+		dedication: 1,
+		luck: 3
+		},
+	cleric: {
 		hp: 2,
-		diplomacy: 0,
+		diplomacy: 2,
+		intelligence: 2,
+		speed: 2,
+		strength: 1,
+		defense: 2,
+		dedication: 3,
+		luck: 1
+		},
+	outlaw: {
+		hp: 1,
+		diplomacy: 3,
 		intelligence: 2,
 		speed: 3,
 		strength: 1,
 		defense: 1,
-		dedication: 0,
+		dedication: 1,
 		luck: 3
-	},
+		},
 	decrepit: {
 		hp: 3,
-		diplomacy: 0,
+		diplomacy: 1,
 		intelligence: 1,
 		speed: 1,
 		strength: 3,
 		defense: 3,
-		dedication: 1,
-		luck: 0
-	},
+		dedication: 2,
+		luck: 1
+		},
 	soothsayer: {
 		hp: 1,
 		diplomacy: 2,
 		intelligence: 3,
 		speed: 2,
-		strength: 1,
-		defense: 1,
+		strength: 2,
+		defense: 2,
 		dedication: 2,
-		luck: 0
-	},
+		luck: 1
+		},
 	crustacean: {
 		hp: 3,
-		diplomacy: 0,
+		diplomacy: 1,
 		intelligence: 1,
 		speed: 3,
 		strength: 3,
 		defense: 2,
-		dedication: 0,
-		luck: 0
-	},
+		dedication: 1,
+		luck: 1
+		},
 	mechanic: {
-		hp: 1,
-		diplomacy: 0,
-		intelligence: 3,
+		hp: 2,
+		diplomacy: 1,
+		intelligence: 2,
 		speed: 3,
-		strength: 1,
-		defense: 1,
+		strength: 2,
+		defense: 2,
 		dedication: 1,
 		luck: 2
-	},
+		},
 	alchemist: {
 		hp: 1,
-		diplomacy: 1,
+		diplomacy: 2,
 		intelligence: 3,
-		speed: 1,
+		speed: 2,
 		strength: 1,
 		defense: 1,
-		dedication: 1,
+		dedication: 2,
 		luck: 3
-	},
+		},
 	niobraran: {
 		hp: 2,
-		diplomacy: 0,
-		intelligence: 0,
+		diplomacy: 1,
+		intelligence: 1,
 		speed: 2,
 		strength: 3,
 		defense: 2,
 		dedication: 2,
 		luck: 2
-	}
+		}
 };
 
 var chosenClass;
@@ -318,7 +318,7 @@ var colorPalette = {
 	money:"#E3DC95",//E3C78F
 	dark:"#1B2021",
 	levelUp:"#FFA500",
-	npc: "#8DD6D6",
+	npc: "#B3B3B3",
 	combo: "#B7978A",//weapon colors
 	speed: "#8DB78F",//weapon colors
 	strength: "#8DB7C7",//weapon colors
@@ -489,33 +489,34 @@ class Wilderness { //as you traverse the path
 		} else if (Math.random() > .9) {//8% chance to be in location
 			visit();
 		} else if (Math.random() >.9){
+			pickupSound.play();
 			let type = "food";//!
 			let item = Object.assign({}, randomChoice(gameItems[type][0]));
 			item.type = type;
-			pickupSound.play();
 			addItem(item);			
 			let text = randomChoice(phrase.obtain) + item.name;
 			gameText(text);
 			updateInventory();
 		} else if (Math.random() >.95){
+			pickupSound.play();
 			let type = "weapon";//!
 			let item = Object.assign({}, randomChoice(gameItems[type][0]));
 			item.type = type;
-			pickupSound.play();
 			addItem(item);			
 			let text = randomChoice(phrase.obtain) + item.name;
 			gameText(text);
 			updateInventory();
 		} else if (Math.random() > .6) {//chance to encounter npc
+			clickSound.play();//! eventually change out for an encounter jingle. One for each kind. Item, miniquest, etc
 			let npc = randomChoice(npcData.secondary);
-			npc.name = colorize(npc.name,colorPalette.npc);
+			npc.name = colorize(npc.name,colorPalette.npc,true);
 			if (!('gender' in npc)) {
 				npc.gender = randomChoice(['male','female']);
 			}
 			let npcPron = pronouns[npc.gender];
 
 			let introText = randomChoice(npcData.traits);
-			introText = introText.replace('{npc}',npc.name).replace('{po}',npcPron.po).replace('{pp}',npcPron.pp).replace('{ap}',npcPron.ap).replace('{ps}',npcPron.ps);
+			introText = introText.replaceAll('{npc}',npc.name).replaceAll('{po}',npcPron.po).replaceAll('{pp}',npcPron.pp).replaceAll('{ap}',npcPron.ap).replaceAll('{ps}',npcPron.ps).replaceAll('{loc}',randomChoice(phrase.locational[coordinates.location]));
 			if (alphabet.vowels.includes(introText[0].toLowerCase())) {
 				introText = ' an '+introText;
 			} else {
@@ -525,9 +526,7 @@ class Wilderness { //as you traverse the path
 			gameText(text);
 
 			displayImage("resources/encounters/npcSecondary"+randomChoice([1,2,3])+".png");
-			clickSound.play();//! eventually change out for an encounter jingle. One for each kind. Item, miniquest, etc
 		} else {// nothing happens
-			displayImage("resources/locations/"+coordinates.location+".png");
 			clickSound.play();
 			//calculate continue text
 			if (bossCount > 5) {
@@ -543,14 +542,22 @@ class Wilderness { //as you traverse the path
 				var n = randomChoice(phrase.cont3);
 			};
 			gameText(n);
+			if (Math.random()<.05) {// change game region
+				coordinates.location = randomChoice(habitat);
+				document.getElementById("sceneTitle").innerHTML = coordinates.location;
+				gameText(" As your path continues, you find yourself entering a "+coordinates.location,true);
+			}
+			displayImage("resources/locations/"+coordinates.location+".png");
 		};
 	}
 };
 class City { //when you're visiting a museum, library, etc
-	constructor() {
+	constructor(name) {
 		citSound.play();
+		this.name = name;
+		document.getElementById("sceneTitle").innerHTML = this.name;
 		if (bossCount < 5) {
-			document.getElementById("gameText").innerHTML += " You enter with great relief.";
+			gameText(" You enter with great relief.",true);
 		};
 		document.getElementById("actionButton").style.display = "inline";
 		document.getElementById("actionButton").innerHTML = "Leave City";
@@ -558,7 +565,6 @@ class City { //when you're visiting a museum, library, etc
 		document.getElementById("exploreButton").innerHTML = "Explore City";
 		//bossCount = Math.random() * 5 + 10; //! old way of doing boss countdown. Reset when you hit the city. Now it happens every 50ish turns in the wild.
 		//bossCount = Math.round(bossCount);
-		document.getElementById("cityScreen").style.visibility = 'visible';
 
 		//Give merchant new items
 		updateBuyable();
@@ -566,7 +572,6 @@ class City { //when you're visiting a museum, library, etc
 	continue() {//leave the city
 		clickSound2.play();
 		gameState = new Wilderness();
-		document.getElementById("cityScreen").style.visibility = 'hidden';
 		document.getElementById("actionButton").innerHTML = "Continue";
 	}
 	explore() {
@@ -675,9 +680,7 @@ function load() {
 		player.renown = parseInt(saveLoad[7]);
 		catName = saveLoad[8];
 		bossCount = saveLoad[12];
-		document.getElementById("pLevel").innerHTML = player.level;
-		document.getElementById("xpNow").innerHTML = player.xp;
-		document.getElementById("money").innerHTML = "Money: " + player.money;
+		updatePlayerInfo();
 		document.getElementById("merchR").innerHTML = "Renown: " + player.renown;
 
 		
@@ -754,16 +757,16 @@ function clearSave() {
 };
 //Stats info
 function levelUp() {
-	//gameText("<br>Reached level <b>"+player.level+"</b>");
-	let lvlTxt = colorize("level "+(player.level+1), colorPalette.levelUp, true);
-	document.getElementById("gameText").innerHTML += "<br>Reached "+lvlTxt;
-	player.level = player.level + 1;
-	document.getElementById("pLevel").innerHTML = (player.level);
 	if (player.level % 10 === 0) {
 		lvlTenSound.play();
 	} else {
 		lvlSound.play();
 	}
+	//gameText("<br>Reached level <b>"+player.level+"</b>");
+	let lvlTxt = colorize("level "+(player.level+1), colorPalette.levelUp, true);
+	gameText("<br>Reached "+lvlTxt,true);
+	player.level = player.level + 1;
+	updatePlayerInfo();
 	//Increase XP till next level
 	player.xpNext = player.xpNext * 1.3 + 20;
 	player.xpNext = Math.round(player.xpNext);
@@ -1033,8 +1036,9 @@ function equip(weapon) {
 		gameText("You lack the ability to equip this item.");
 		return;
 	};
+	equipSound.play();
 	if (gameState instanceof Fighting && gameState.attacking === true) {
-		gameState.setAttack();
+		gameState.defend();
 	}
 	let item = Object.assign({},inventory[weapon]);//creates shallow copy instead of a deep one
 	inventory.splice(weapon, 1);
@@ -1059,8 +1063,6 @@ function equip(weapon) {
 	equippedWeapon = item;
 	//equippedWeapon.push(weapon);
 	gameText("You equip the " + equippedWeapon.name + ".");
-
-	equipSound.play();
 	updateInventory();
 	updateStats();
 	let attackStat = "("+statsAbbreviated[equippedWeapon.attackStat]+")";
@@ -1068,9 +1070,9 @@ function equip(weapon) {
 	for (const [key, value] of Object.entries(equippedWeapon.buffs)) {
 		text+=" "+statsAbbreviated[key]+" +"+value+",";
 	}
-	document.getElementById("equipped").innerHTML = "Equipped: " + equippedWeapon.name+" +"+equippedWeapon.power+" "+attackStat+"<br>";
+	document.getElementById("equipped").innerHTML = "Equipped: " + equippedWeapon.name+"<br>Power: +"+equippedWeapon.power+" "+attackStat+"<br>";
 	if (text !== "Buffs:") {
-		text = text.replace("+-","-");
+		text = text.replaceAll("+-","-");
 		document.getElementById("equipped").innerHTML += text.slice(0, -1);
 	}
 };
@@ -1097,7 +1099,7 @@ function damageMonster(power) {
 			if (player.renown < 100) {
 				player.renown += 1;
 				document.getElementById("merchR").innerHTML = "Renown: " + player.renown;
-				document.getElementById("gameText").innerHTML += " Your renown among the land grows.";
+				gameText(" Your renown among the land grows.",true);
 			};
 			bossBattle = false;
 		};
@@ -1150,7 +1152,6 @@ function flee() {
 function despawnMonster() {
 	document.getElementById("monsterSelection").style.visibility = "hidden";
 	displayImage("resources/black.png");
-	document.getElementById("monsterData").innerHTML = "";
 }
 function death() {
 	document.getElementById("gameOver").style.visibility = 'visible';
@@ -1162,7 +1163,7 @@ function death() {
 function gainXP(gained) {
 	
 	player.xp += gained;
-	document.getElementById("xpNow").innerHTML = player.xp;
+	updatePlayerInfo();
 	if (player.xp >= player.xpNext) {
 		levelUp();
 		return true
@@ -1189,7 +1190,8 @@ function monsterDeath(gainedLevel=false) {
 	//Determine drop
 	player.money += spawnedMonster.reward.money;
 	let moneyText = colorize(spawnedMonster.reward.money+" gold", colorPalette.money, false);
-	document.getElementById("gameText").innerHTML += "<br>Gained "+moneyText;
+	gameText("<br>Gained "+moneyText,true);
+	updatePlayerInfo();
 	for (var i = Math.random(); i >.7 ;) {
 		let item;
 		if (i > .9) {
@@ -1214,11 +1216,11 @@ function monsterDeath(gainedLevel=false) {
 			item.type = type;
 			addItem(item);
 		};
-		document.getElementById("gameText").innerHTML += ", "+item.name;
+		gameText(", "+item.name,true);
 		updateInventory();
 		i = Math.random();
 	};
-	document.getElementById("gameText").innerHTML += " from "+spawnedMonster.name;
+	gameText(" from "+spawnedMonster.name,true);
 };
 function monsterAttack() {
 	readyness(true);
@@ -1274,7 +1276,7 @@ function classSelection (selectedClass, name) {
 	document.getElementById("gameScreen").style.visibility = 'visible';
 	if (player.class === "Alchemist") {
 		player.money = 15;
-		document.getElementById("money").innerHTML = "Money: " + player.money;
+		updatePlayerInfo();
 	};
 	var sins = ["Greed","Lust","Gluttony"];
 	var abilities = {
@@ -1312,6 +1314,7 @@ function classSelection (selectedClass, name) {
 	if (player.class === "Ranger") {
 		document.getElementById("compass").disabled = false;
 	};
+	updatePlayerInfo();
 };
 function classDescription(selectedClass, name) {
 	//blipSound.play();
@@ -1507,7 +1510,6 @@ function visit() {
 
 	//Check if location is a city/town
 	if (!location[2]) {
-		gameState = new City();
 		var text = randomChoice(phrase.location);
 
 		let locationName = randomChoice(adj.names1) + randomChoice(adj.names2);
@@ -1516,6 +1518,7 @@ function visit() {
 		gameText(text);
 		//random city pic
 		displayImage("resources/" + location[0] + ".png");
+		gameState = new City(locationName);
 		return;
 	};
 	
@@ -1546,7 +1549,7 @@ function visit() {
 		if (!gainedLevel) {
 			xpLocation.play();
 		}
-		document.getElementById("gameText").innerHTML += '<br> Gained '+colorize(i+' xp',colorPalette.levelUp)+'.'
+		gameText('<br> Gained '+colorize(i+' xp',colorPalette.levelUp)+'.', true)
 	};
 };
 function movePlayer() {//updates player location on the map
@@ -1691,7 +1694,7 @@ function sellItem(item, index) {
 	price = price * inventory[index].value;
 	price = Math.ceil(price);
 	player.money += price;
-	document.getElementById("money").innerHTML = "Money: " + player.money;
+	updatePlayerInfo();
 	document.getElementById("merchM").innerHTML = "Money: " + player.money;
 	gameText("You sell the " + inventory[index].name + " for " + price + ".");
 	inventory.splice(index,1);
@@ -1716,7 +1719,7 @@ function buyItem(item, index) {//index is the index in the merchant's inventory
 		updateInventory();
 		updateSellable();
 		player.money -= i;
-		document.getElementById("money").innerHTML = "Money: " + player.money;
+		updatePlayerInfo();
 	};
 };
 
@@ -1857,9 +1860,11 @@ function cookPotion(item) {
 	openCook("");
 }
 
-function gameText(text) {
-	document.getElementById("gameText").innerHTML = text;
-};
+function updatePlayerInfo() {
+	document.getElementById("pLevel").innerHTML = "Lvl: "+player.level;
+	document.getElementById("xpNow").innerHTML = "XP: "+player.xp;
+	document.getElementById("money").innerHTML = "Money: "+player.money;
+}
 
 
 //Utility functions:
@@ -1886,3 +1891,16 @@ function  randomChoice(options) {
 function displayImage(path) {
 	document.getElementById("monster").src = path;
 }
+
+function score(skillTest) {
+	//loop through each skill and score it against test level
+	//if test.level*2 === playerskill.level then you have 50% chance to get positive or negative outcome
+}
+
+function gameText(text,append=false) {
+	if (append) {
+		document.getElementById("gameText").innerHTML += text;
+	} else {
+		document.getElementById("gameText").innerHTML = text;
+	}
+};

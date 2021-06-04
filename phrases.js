@@ -43,7 +43,15 @@ var phrase = {
 		" falls to the ground",
 		" crumbles before you",
 		" perishes"
-	]
+	],
+	locational: {
+		"Meadow":["haystack",""],
+		"Swamp":["pile of muck","sulfurous mass of swamp","mossy growth","lump of fungus"],
+		"Forest":["heap of underbrush","fallen tree"],
+		"Deep Tundra":["snow bank","snow drift","makeshift igloo"],
+		"Mountain Range":["pile of rock","rocky outcrop"],
+		"Desert":["pile of sand","shaded oasis","sandy pile of rags"]
+	}
 };
 
 

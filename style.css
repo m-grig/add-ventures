@@ -70,9 +70,10 @@
 		#enemyWrapper {
 			position: absolute;
 			top: 65px;
-			/*margin-left: auto;
-			margin-right: auto;*/
-			width: 60%;
+			margin-left: auto;
+			margin-right: auto;
+			width: 80%;
+			min-width: 350px;
 			display: inline;
 		}
 		#monster {
@@ -85,8 +86,9 @@
 			overflow: wrap;
 		}
 		#monsterSelection {
-			width: 10%;
+			width: 100px;
 			float: left;
+			visibility: hidden;
 			margin-right: 5px;
 			display: inline;
 			overflow: wrap;
@@ -154,20 +156,10 @@
 		#levelWrapper1 p {
 			margin: 5px;
 		}
-		#levelWrapper2 {
-			position: absolute;
-			z-index: 1;
-			margin-left: 65px;
-			top: 431px;
-			width: 200px;
-		}
-		#levelWrapper2 p {
-			margin: 5px;
-		}
 		#equipped {
 			position: absolute;
 			z-index: 1;
-			top: 435px;
+			top: 445px;
 			margin-left: 200px;
 		}
 
@@ -191,10 +183,17 @@
 		#money {
 			margin-bottom: 10px;
 		}
-				/*Game Actions*/
-		#actionSpan {
+		/*Game Actions*/
+		#actionDiv {
 			position: absolute;
-			top: 370px;
+			margin-left: auto;
+			margin-right: auto;
+			text-align: center;
+			width: 80%;
+			top: 280px;
+		}
+		#actionSpan {
+			top: 380px;
 			width: 80%;
 			margin-left: auto;
 			margin-right: auto;
@@ -221,7 +220,7 @@
 
 		#merchantButton {
 			position: absolute;
-			top:660px;
+			top:670px;
 			margin-left: 190px;
 			opacity:.9;
 		}
@@ -298,7 +297,7 @@
 			width: 120px;
 			height: 130px;
 			margin-left: 310px;
-			top: 520px;
+			top: 530px;
 			background: dimgray;
 			text-align: center;
 			overflow: scroll;
@@ -334,7 +333,7 @@
 			width: 120px;
 			height: 130px;
 			margin-left: 175px;
-			top: 520px;
+			top: 530px;
 			background: dimgray;
 			overflow: scroll;
 			text-align: center;
@@ -393,11 +392,13 @@
 
 		/*Game info*/
 		#gameText {
-			width:300px;
-			position: absolute;
+			text-align: left;
+			max-width: 600px;
+			width: 80%;
 			z-index: 1;
-			top: 280px;
-			margin-left: 55px;
+			size: 14pt;
+			margin-left: auto;
+			margin-right: auto;
 			overflow-wrap: normal;
 			color: lightgray;
 		}
@@ -509,6 +510,7 @@
 			width: 128px;
 			height: 128px;
 			background-color: white;
+			display: none;
 		}
 		#mapImg {
 			width: 128px;		
