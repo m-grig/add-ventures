@@ -318,7 +318,7 @@ var colorPalette = {
 	money:"#E3DC95",//E3C78F
 	dark:"#1B2021",
 	levelUp:"#FFA500",
-	npc: "#B3B3B3",
+	npc: "#99CCB1",
 	combo: "#B7978A",//weapon colors
 	speed: "#8DB78F",//weapon colors
 	strength: "#8DB7C7",//weapon colors
@@ -508,24 +508,7 @@ class Wilderness { //as you traverse the path
 			updateInventory();
 		} else if (Math.random() > .6) {//chance to encounter npc
 			clickSound.play();//! eventually change out for an encounter jingle. One for each kind. Item, miniquest, etc
-			let npc = randomChoice(npcData.secondary);
-			npc.name = colorize(npc.name,colorPalette.npc,true);
-			if (!('gender' in npc)) {
-				npc.gender = randomChoice(['male','female']);
-			}
-			let npcPron = pronouns[npc.gender];
-
-			let introText = randomChoice(npcData.traits);
-			introText = introText.replaceAll('{npc}',npc.name).replaceAll('{po}',npcPron.po).replaceAll('{pp}',npcPron.pp).replaceAll('{ap}',npcPron.ap).replaceAll('{ps}',npcPron.ps).replaceAll('{loc}',randomChoice(phrase.locational[coordinates.location]));
-			if (alphabet.vowels.includes(introText[0].toLowerCase())) {
-				introText = ' an '+introText;
-			} else {
-				introText = ' a '+introText;
-			}
-			let text = randomChoice(phrase.meetNpc)+" you "+randomChoice(phrase.encounter)+introText+'.';
-			gameText(text);
-
-			displayImage("resources/encounters/npcSecondary"+randomChoice([1,2,3])+".png");
+			gameState = new NpcEvent();
 		} else {// nothing happens
 			clickSound.play();
 			//calculate continue text
@@ -585,10 +568,57 @@ class NpcEvent {
 		document.getElementById("blockButton").style.display = "none";
 		document.getElementById("actionButton").style.display = "inline";
 		document.getElementById("actionButton").innerHTML = "Continue";
+		document.getElementById("exploreButton").style.display = "inline";
+		document.getElementById("exploreButton").innerHTML = "Talk";
+
+		this.npc = randomChoice(npcData.secondary);
+		this.npc.name = colorize(this.npc.name,colorPalette.npc,true);
+		if (!('gender' in this.npc)) {
+			this.npc.gender = randomChoice(['male','female']);
+		}
+		this.npc.pronoun = pronouns[this.npc.gender];
+
+		let introText = randomChoice(npcData.traits);
+		introText = introText.replaceAll('{npc}',this.npc.name).replaceAll('{po}',this.npc.pronoun.po).replaceAll('{pp}',this.npc.pronoun.pp).replaceAll('{ap}',this.npc.pronoun.ap).replaceAll('{ps}',this.npc.pronoun.ps).replaceAll('{loc}',randomChoice(phrase.locational[coordinates.location]));
+		if (alphabet.vowels.includes(introText[0].toLowerCase())) {
+			introText = ' an '+introText;
+		} else {
+			introText = ' a '+introText;
+		}
+		
+		let text = randomChoice(phrase.meetNpc)+" you "+randomChoice(phrase.encounter)+introText+'.';
+
+		gameText(text);
+		displayImage("resources/encounters/npcSecondary"+randomChoice([1,2,3])+".png");
 	}
 	continue() {//leave the npc
 		gameState = new Wilderness();
-		document.getElementById("actionButton").innerHTML = "Continue";
+		if (typeof this.quest === 'undefined') {
+			gameState.continue();
+		} else {
+			gameText(this.quest.text.decline);
+			document.getElementById("actionButton").innerHTML = "Continue";
+			document.getElementById("exploreButton").style.display = "none";	
+		}
+	}
+	explore() {
+		let text;
+		//if (Math.random() > .8) {//quest
+		if (typeof this.quest === 'undefined') { //check if quest is started. If not, start it
+			this.newQuest();
+			this.status = 'introduction';
+			let questText = this.quest.text[this.status].replaceAll("{item}",this.quest.item.name);
+			text = this.npc.name+": \""+questText+"\"";
+			document.getElementById("exploreButton").innerHTML = "Accept";
+			document.getElementById("actionButton").innerHTML = "Decline";
+		} else {
+			text = "Placeholder"
+		}
+		gameText(text);
+	}
+	newQuest() {
+		this.quest = randomChoice(randomDictChoice(quests));
+		this.quest.item = randomChoice(randomDictChoice(otherItems));
 	}
 };
 class StartSequence {
@@ -600,8 +630,8 @@ class StartSequence {
 		this.story = [
 			{text:"You awaken in darkness surrounded by water.", image:"resources/black.png"},
 			{text:"As you look up, you see a light and begin to swim toward it", image:"resources/underwater.png"},
-			{text:"You burst through the surface and gasp for air. As your eyes adjust to the light, you look around to see the shimmering waters of a crystal pool in the middle of a "+coordinates.location, image:"resources/locations/"+coordinates.location+".png"},
-			{text:"What will you do?", image:"resources/locations/"+coordinates.location+".png"},
+			{text:"You burst through the surface and gasp for air. As your eyes adjust to the light, you look around to see the shimmering waters of a crystal pool in the middle of a "+coordinates.location, image:"resources/locations/pond-"+coordinates.location+".png"},
+			{text:"What will you do?", image:"resources/locations/pond-"+coordinates.location+".png"},
 			{text:"You swim to shore and begin your journey.", image:"resources/locations/"+coordinates.location+".png"}
 		]
 	}
@@ -618,6 +648,7 @@ class StartSequence {
 				gameText("As you try to swim to the shore, you realize you don't know how to swim. You sputter ")
 			} else {
 				gameText(this.story[this.step].text);
+				displayImage(this.story[this.step].image);
 				gameState = new Wilderness();
 			}
 		} else {
@@ -633,8 +664,6 @@ class StartSequence {
 		document.getElementById("exploreButton").innerHTML = "Stay in Pond";
 	}
 	explore() {
-	}
-	die() {
 		death();
 	}
 }
@@ -825,16 +854,15 @@ function updateMoves() {
 	var label = document.createElement('label');
 	label.innerHTML = "Moves:";
 	document.getElementById("moveset").appendChild(label);
-	var i = 0;
 
-	pAbilities.forEach(function (item){
-		var button = document.createElement('button');
-		button.innerHTML = item[0];
+	for (let i in pAbilities) {
+		let button = document.createElement('button');
+		button.innerHTML = pAbilities[i][0];
 		button.value = i;
-		button.onclick = function() {useMove(item, button.value);};
+		button.onclick = function() {useMove(pAbilities[i], button.value);};
 		document.getElementById("moveset").appendChild(button);
-		i++;
-	});
+	}
+
 };
 
 //Inventory
@@ -843,31 +871,22 @@ function updateInventory() {
 	var label = document.createElement('label');
 	label.innerHTML = "Inventory:";
 	document.getElementById("inventory").appendChild(label);
-	var i = 0
 	//add items to inventory from "inventory" array
-	inventory.forEach(function (item){
+	for (let i in inventory) {
 		//Add button for item to be used
 		let button = document.createElement('button');
+		let item = inventory[i]
 		button.innerHTML = "<b>"+item.name+"</b>";
 		button.value = i;
 		if (item.type === "weapon") {
 			console.log("weapon:",item);
 			button.title = "pwr: " + item.power+" stat: "+statsAbbreviated[item.attackStat];
-			/*
-			if (item.attackStat === "strength") {
-				button.style.background = "#B7978A"; 
-			} else if (item.attackStat === "speed"){
-				button.style.background = "#8DB78F"; 
-			} else {
-				button.style.background = "#8DB7C7"; 
-			};*/
 			if (!item.rarity || item.rarity === "standard") {
 				button.style.background = colorPalette.standard
 			} else {
 				console.log(item.rarity);
 				button.style.background = "radial-gradient("+colorPalette[item.rarity].light+","+colorPalette[item.rarity].main+")";
 			}
-			
 			button.innerHTML += "<br>Power: "+item.power+" "+getIcon(item.attackStat);
 		} else if (item.type === "food") {
 			console.log("food",item)
@@ -890,9 +909,7 @@ function updateInventory() {
 		};
 		button.onclick = function() {useItem(item, button.value)};
 		document.getElementById("inventory").appendChild(button);
-		i++;
-	});
-	//var item = Array.from(gameItems[food1][0]);
+	}
 };
 
 function addItem(item, rarity=undefined) {	
@@ -1886,6 +1903,20 @@ function getIcon(filename) {
 function  randomChoice(options) {
 	let i = Math.round(Math.random() * (options.length - 1));
 	return options[i]
+}
+
+function randomDictChoice(options) {
+	console.log("length of quest object minus 1:");
+	console.log(Object.keys(options).length - 1);
+	let i = Math.round(Math.random() * (Object.keys(options).length - 1));
+	let count = 0;
+	for (let key in options) {
+		if (count === i) {
+			return options[key]
+		}
+		count ++;
+	}
+
 }
 
 function displayImage(path) {

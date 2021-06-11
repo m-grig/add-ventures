@@ -46,10 +46,10 @@ var phrase = {
 	],
 	locational: {
 		"Meadow":["haystack",""],
-		"Swamp":["pile of muck","sulfurous mass of swamp","mossy growth","lump of fungus"],
-		"Forest":["heap of underbrush","fallen tree"],
-		"Deep Tundra":["snow bank","snow drift","makeshift igloo"],
-		"Mountain Range":["pile of rock","rocky outcrop"],
+		"Swamp":["pile of muck","sulfurous mass of swamp","mossy growth","lump of fungus","festering pool of slime"],
+		"Forest":["heap of underbrush","fallen tree","pile of foliage"],
+		"Deep Tundra":["snow bank","snow drift","makeshift igloo","pile of snow"],
+		"Mountain Range":["pile of rock","rocky outcrop","rocky cove"],
 		"Desert":["pile of sand","shaded oasis","sandy pile of rags"]
 	}
 };

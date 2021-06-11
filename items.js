@@ -263,6 +263,15 @@ var effects = {
 		{name:"Bane", boosts:{strength:2}}
 	]
 };
+
+var otherItems = {
+	inCaseTheresANeedForCategories: [
+		{name:"handful of nuts"},
+		{name:"neckerchief"},
+		{name:"decorative rug"},
+		{name:"lucky pair of socks"},
+	]
+};
 /*
 health
 diplomacy

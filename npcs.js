@@ -16,6 +16,7 @@ var npcData = {
         {name:'Farmer',gender:'male'},
         {name:'Corrupt Banker'},
         {name:'Devious Crab'},
+        {name:'Scarecrow',gender:'neuter'},
         {name:'Con Artist'},
         {name:'Wanderer'},
         {name:'Armored Worm'},
@@ -55,7 +56,9 @@ var npcData = {
         "{npc} laying in a {loc}",
         "{npc} beckoning you to approach {po} from a {loc}",
         "{npc} observing you from a {loc}",
+        "{npc} mucking about next to a {loc}",
         "{npc} enjoying {po}self by a {loc}",
+        "{npc} enjoying {po}self on a {loc}",
         "deceivingly friendly {npc} calling out to you by your first name"
     ]
 };
