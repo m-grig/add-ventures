@@ -318,7 +318,7 @@ var colorPalette = {
 	money:"#E3DC95",//E3C78F
 	dark:"#1B2021",
 	levelUp:"#FFA500",
-	npc: "#99CCB1",
+	npc: "#5ACC8F",
 	combo: "#B7978A",//weapon colors
 	speed: "#8DB78F",//weapon colors
 	strength: "#8DB7C7",//weapon colors
@@ -589,7 +589,7 @@ class NpcEvent {
 		let text = randomChoice(phrase.meetNpc)+" you "+randomChoice(phrase.encounter)+introText+'.';
 
 		gameText(text);
-		displayImage("resources/encounters/npcSecondary"+randomChoice([1,2,3])+".png");
+		displayImage("resources/encounters/npc-"+coordinates.location+".png");
 	}
 	continue() {//leave the npc
 		gameState = new Wilderness();
@@ -607,12 +607,14 @@ class NpcEvent {
 		if (typeof this.quest === 'undefined') { //check if quest is started. If not, start it
 			this.newQuest();
 			this.status = 'introduction';
-			let questText = this.quest.text[this.status].replaceAll("{item}",this.quest.item.name);
+			let questText = this.quest.text[this.status].replaceAll("{item}",this.quest.item.name).replaceAll("{relation}",randomChoice(relations));
 			text = this.npc.name+": \""+questText+"\"";
 			document.getElementById("exploreButton").innerHTML = "Accept";
 			document.getElementById("actionButton").innerHTML = "Decline";
 		} else {
-			text = "Placeholder"
+			text = this.quest.text.accept;
+			document.getElementById("actionButton").innerHTML = "Continue";
+			document.getElementById("exploreButton").style.display = "none";
 		}
 		gameText(text);
 	}
