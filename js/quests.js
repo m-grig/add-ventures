@@ -46,13 +46,15 @@ var quests = {
             introduction:"Hey bro, you wanna help me get my {item} to my {relation} or what?",
             accept:"Okay cool.",//split out to random array general to all quests?
             decline:"Really? You're going to just walk away from an opportunity like this? Very well.",
+            complete:"Very good. I'm glad you didn't just walk away with it. It's far more valuable than anything I could've awarded you with."
         }
         },
-        {title:"Take {item} to {relation}",
+        {title:"Find {item} for {name}",
         text:{
             introduction:"Are you ever a sight for sore eyes. My {relation} asked me to watch over their {item}. I seem to have lost it. Either you help me find it, or I blame its disappearance on you. Capiche?",
             accept:"Okay cool.",//split out to random array general to all quests?
             decline:"Really? You're going to just walk away from an opportunity like this? Very well.",
+            complete:"I must say I am surprised."
         }
         }
     ]

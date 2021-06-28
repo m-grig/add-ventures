@@ -379,7 +379,8 @@ var monsters = {
 
 //stateful game states
 class Fighting { //in battle
-	constructor() {
+	constructor(quest=false) {
+		this.quest = quest;
 		this.setChances();
 		if (statNumerators.speed > spawnedMonster.speed) {
 			this.setAttack();
@@ -490,6 +491,7 @@ class Wilderness { //as you traverse the path
 			visit();
 		} else if (Math.random() >.9){
 			pickupSound.play();
+			displayImage("resources/locations/"+coordinates.location+".png");
 			let type = "food";//!
 			let item = Object.assign({}, randomChoice(gameItems[type][0]));
 			item.type = type;
@@ -499,6 +501,7 @@ class Wilderness { //as you traverse the path
 			updateInventory();
 		} else if (Math.random() >.95){
 			pickupSound.play();
+			displayImage("resources/locations/"+coordinates.location+".png");
 			let type = "weapon";//!
 			let item = Object.assign({}, randomChoice(gameItems[type][0]));
 			item.type = type;
@@ -563,7 +566,7 @@ class City { //when you're visiting a museum, library, etc
 	}
 };
 class NpcEvent {
-	constructor() {
+	constructor(questComplete=false) {
 		document.getElementById("attackButton").style.display = "none";
 		document.getElementById("blockButton").style.display = "none";
 		document.getElementById("actionButton").style.display = "inline";
@@ -572,14 +575,14 @@ class NpcEvent {
 		document.getElementById("exploreButton").innerHTML = "Talk";
 
 		this.npc = randomChoice(npcData.secondary);
-		this.npc.name = colorize(this.npc.name,colorPalette.npc,true);
+		this.displayName = colorize(this.npc.name,colorPalette.npc,true);
 		if (!('gender' in this.npc)) {
 			this.npc.gender = randomChoice(['male','female']);
 		}
 		this.npc.pronoun = pronouns[this.npc.gender];
 
 		let introText = randomChoice(npcData.traits);
-		introText = introText.replaceAll('{npc}',this.npc.name).replaceAll('{po}',this.npc.pronoun.po).replaceAll('{pp}',this.npc.pronoun.pp).replaceAll('{ap}',this.npc.pronoun.ap).replaceAll('{ps}',this.npc.pronoun.ps).replaceAll('{loc}',randomChoice(phrase.locational[coordinates.location]));
+		introText = introText.replaceAll('{npc}',this.displayName).replaceAll('{po}',this.npc.pronoun.po).replaceAll('{pp}',this.npc.pronoun.pp).replaceAll('{ap}',this.npc.pronoun.ap).replaceAll('{ps}',this.npc.pronoun.ps).replaceAll('{loc}',randomChoice(phrase.locational[coordinates.location]));
 		if (alphabet.vowels.includes(introText[0].toLowerCase())) {
 			introText = ' an '+introText;
 		} else {
@@ -595,10 +598,14 @@ class NpcEvent {
 		gameState = new Wilderness();
 		if (typeof this.quest === 'undefined') {
 			gameState.continue();
-		} else {
+		} else if (document.getElementById("actionButton").innerHTML === "Decline"){
 			gameText(this.quest.text.decline);
 			document.getElementById("actionButton").innerHTML = "Continue";
-			document.getElementById("exploreButton").style.display = "none";	
+			document.getElementById("exploreButton").style.display = "none";
+			this.quest = undefined;
+		} else {
+			getRandomMonster();
+			gameState = new Fighting(true);
 		}
 	}
 	explore() {
@@ -608,7 +615,8 @@ class NpcEvent {
 			this.newQuest();
 			this.status = 'introduction';
 			let questText = this.quest.text[this.status].replaceAll("{item}",this.quest.item.name).replaceAll("{relation}",randomChoice(relations));
-			text = this.npc.name+": \""+questText+"\"";
+			displayImage("resources/npc/"+this.npc.name+".png");
+			text = this.displayName+": \""+questText+"\"";
 			document.getElementById("exploreButton").innerHTML = "Accept";
 			document.getElementById("actionButton").innerHTML = "Decline";
 		} else {
@@ -1121,8 +1129,12 @@ function damageMonster(power) {
 				gameText(" Your renown among the land grows.",true);
 			};
 			bossBattle = false;
-		};
-		gameState = new Wilderness();
+		}
+		if (gameState.quest) {
+			gameState = new NpcEvent(true);
+		} else {
+			gameState = new Wilderness();
+		}
 		monsterDeath(gainedLevel);
 		despawnMonster();
 	} else if (hit <= 0){
@@ -1908,8 +1920,6 @@ function  randomChoice(options) {
 }
 
 function randomDictChoice(options) {
-	console.log("length of quest object minus 1:");
-	console.log(Object.keys(options).length - 1);
 	let i = Math.round(Math.random() * (Object.keys(options).length - 1));
 	let count = 0;
 	for (let key in options) {

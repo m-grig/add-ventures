@@ -270,6 +270,8 @@ var otherItems = {
 		{name:"neckerchief"},
 		{name:"decorative rug"},
 		{name:"lucky pair of socks"},
+		{name:"pail of snacks"},
+		{name:"timepiece"},
 	]
 };
 /*

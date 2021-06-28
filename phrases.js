@@ -72,6 +72,9 @@ var relations = [
 	"Best Friend",
 	"Shoe Mender",
 	"Brother",
+	"Great Uncle",
+	"Aunt",
+	"Neighbor",
 	"Grandmother"
 ];
 
