@@ -3,7 +3,7 @@
 			src: url('resources/Munro.ttf');
 		}
 		body {
-			background: #040025;
+			background: /*#040025*/black;
 			font-family: 'Munro';
 			color: lightgray;
 		}

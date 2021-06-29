@@ -10,6 +10,7 @@ class Player {
 		this.poisoned = false;
 		this.statMultipliers = {};
 		this.stats = {};
+		this.buffs = {};
 		this.statBase = {};
 	}
 	advanceTurn() {//right now just has rotten food. Eventually includes other attributes and statuses
@@ -17,6 +18,12 @@ class Player {
 		if (this.poisoned) {
 			this.poison();
 		}
+		for (let key in this.buffs) {
+			if (this.buffs[key] > 1) {
+				this.buffs[key] -= 1;
+			}
+		}
+		updateStats();
 	}
 	poison() {
 		statNumerators.hp -= 1;
@@ -712,10 +719,10 @@ function load() {
 		bossCount = saveLoad.bossCount;
 		updatePlayerInfo();
 		document.getElementById("merchR").innerHTML = "Renown: " + player.renown;
-
 		
 		//Display player stats
-		//updateStats();
+		updateStats();
+		displayStats();
 
 		//Load inventory
 		//inventory = Array.from(saveLoad[10]); or whatever 
@@ -780,14 +787,6 @@ function levelUp() {
 	player.xpNext = player.xpNext * 1.3 + 20;
 	player.xpNext = Math.round(player.xpNext);
 
-	//set Denominators for stats
-	for (const [key, value] of Object.entries(statMultipliers)) {
-		statDenominators[key] += value;
-	}
-	//set Numerators for stats
-	for (const [key, value] of Object.entries(statDenominators)) {
-		statNumerators[key] = value + stats.buff[key];
-	}
 	updateStats();
 
 	//enable compass
@@ -811,7 +810,7 @@ function createStats() {
 		li.innerHTML += value;
 	}
 };
-function updateStats() {
+function displayStats() {
 	numerList.innerHTML = "";
 	for (const [key, value] of Object.entries(statNumerators)) {
 		let li = document.createElement('li');
@@ -828,6 +827,18 @@ function updateStats() {
 
 
 };
+
+function updateStats(params) {
+	//set Denominators for stats
+	for (const [key, value] of Object.entries(statMultipliers)) {
+		statDenominators[key] = value * player.level;
+	}
+	//set Numerators for stats
+	for (const [key, value] of Object.entries(statDenominators)) {
+		statNumerators[key] = value + (player.buffs[key] ?? 0) + (equippedWeapon.buffs[key] ?? 0);
+	}
+	displayStats();
+}
 
 function updateMoves() {
 	document.getElementById("moveset").innerHTML = "";
@@ -998,7 +1009,7 @@ function useItem(item, i) {
 					inventory.splice(i,1);
 				}
 				gameText("*Gulp* You feel your bones enriched with an unusual vigour.");
-				updateStats();
+				displayStats();
 			};
 
 			updateInventory();
@@ -1019,7 +1030,7 @@ function eat(i) {
 	} else {
 		statNumerators.hp += item.heals;
 	};
-	updateStats();
+	displayStats();
 	if (inventory[i].uses <= 1) {
 		inventory.splice(i,1);
 	} else {
@@ -1062,7 +1073,7 @@ function equip(weapon) {
 	//equippedWeapon.push(weapon);
 	gameText("You equip the " + equippedWeapon.name + ".");
 	updateInventory();
-	updateStats();
+	displayStats();
 	let attackStat = "("+statsAbbreviated[equippedWeapon.attackStat]+")";
 	let text = "Buffs:";
 	for (const [key, value] of Object.entries(equippedWeapon.buffs)) {
@@ -1245,7 +1256,7 @@ function monsterAttack() {
 		} else {
 			statNumerators.hp -= hit;
 			gameText(spawnedMonster.name + " hit " + power + " dealing "+colorize(hit+" damage.",colorPalette.hpLight,true));
-			updateStats();
+			displayStats();
 		};	
 	};
 };
@@ -1512,6 +1523,7 @@ function visit() {
 
 	//Check if location is a city/town
 	if (!location[2]) {
+		save(); //auto save the game
 		var text = randomChoice(phrase.location);
 
 		let locationName = randomChoice(adj.names1) + randomChoice(adj.names2);
