@@ -13,7 +13,7 @@ class Player {
 		this.statBase = {};
 	}
 	advanceTurn() {//right now just has rotten food. Eventually includes other attributes and statuses
-		this.rot();
+		decayFood();
 		if (this.poisoned) {
 			this.poison();
 		}
@@ -24,9 +24,6 @@ class Player {
 		if (this.poisonCount < 1) {
 			this.poisoned = false;
 		};
-	}
-	rot() {
-		decayFood();
 	}
 };
 var player = new Player
@@ -703,22 +700,16 @@ function load() {
 		document.getElementById("startScreen").innerHTML = "";
 		document.getElementById("startScreen").style.zIndex = -5;
 
-		var saveLoad = localStorage.getItem("gameSave.txt").split(",");
+		var saveLoad = JSON.parse(localStorage.getItem("gameSave.txt"));
 		//Location before class selection
-		coordinates.y = parseInt(saveLoad[9]);
-		coordinates.x = parseInt(saveLoad[10]);
-		coordinates.compass = saveLoad[11];
+		coordinates = Object.assign({}, saveLoad.coordinates);
 		document.getElementById("compass").value = coordinates.compass;
 
-		classSelection(saveLoad[0], saveLoad[6]);
-		player.level = parseInt(saveLoad[1]);
-		player.xp = parseInt(saveLoad[2]);
-		player.xpNext = parseInt(saveLoad[3]);
-		player.money = parseInt(saveLoad[5]);
-		player.class = saveLoad[6];
-		player.renown = parseInt(saveLoad[7]);
-		catName = saveLoad[8];
-		bossCount = saveLoad[12];
+		classSelection(saveLoad.player.class.toLowerCase(), saveLoad.player.class);
+		Object.assign(player, saveLoad.player);
+
+		catName = saveLoad.cat;
+		bossCount = saveLoad.bossCount;
 		updatePlayerInfo();
 		document.getElementById("merchR").innerHTML = "Renown: " + player.renown;
 
@@ -728,25 +719,12 @@ function load() {
 
 		//Load inventory
 		//inventory = Array.from(saveLoad[10]); or whatever 
-		var loadInventory = localStorage.getItem("inventorySave.txt").split(",");
-		var items = Array.from(loadInventory)
-		for (let i = 1; i < items.length;) {
-			let l = [items[0],items[1],items[2],items[3],items[4],items[5]];
-			inventory.push(l);
-			items.splice(0,6);
-		};
-		//set inventory values to numbers
-		inventory.forEach(function (item){
-			for (let i = 2; i < item.length; i++) {
-				item[i] = parseInt(item[i]);
-			};
-		});
+		inventory = JSON.parse(localStorage.getItem("inventorySave.txt"));
 
 		//If player has any items eqipped
 		updateInventory();
-		if (saveLoad[4] !== "") {
-			i = inventory.length-1;
-			equip(i);
+		if ("equippedWeapon" in saveLoad) {
+			equip(inventory.length-1);
 		};
 
 		//enable compass
@@ -755,38 +733,30 @@ function load() {
 		};
 		document.getElementById("position").style.marginLeft = -coordinates.x*2 + "px";
 		document.getElementById("position").style.top = coordinates.y*2 + "px";
+		gameState = new Wilderness();
 	} else {
 		alert("Save doesn't exist");
 	};
 };
 function save() {
+	console.log(player);
 	clickSound.play();
 	if (!chosenClass) {
 		alert("You have done nothing worth saving");
 	} else {
 		gameText("Your progress has been saved.");
-		var saveData = [];
-		saveData[0] = chosenClass;
-		saveData[1] = player.level;
-		saveData[2] = player.xp;
-		saveData[3] = player.xpNext;
-		saveData[4] = equippedWeapon[4];//!I think this is the value? Maybe the index of the weapon
-		saveData[5] = player.money;
-		saveData[6] = player.class;
-		saveData[7] = player.renown;
-		saveData[8] = catName;
-		saveData[9] = coordinates.y;
-		saveData[10] = coordinates.x;
-		saveData[11] = coordinates.compass;
-		saveData[12] = bossCount;
-		localStorage.setItem("gameSave.txt", saveData);
+		var saveData = {};
+		saveData.player = Object.assign({}, player);
+		saveData.equippedWeapon = true;
+		saveData.cat = catName;
+		saveData.coordinates = coordinates;
+		saveData.bossCount = bossCount;
+		localStorage.setItem("gameSave.txt", JSON.stringify(saveData));
 
 		var inventorySave = Array.from(inventory);
-		if (equippedWeapon.length !== 4) {//what does this do? It's checking to see if an item is equipped I think
-			let item = Array.from(equippedWeapon);
-			inventorySave.push(item);
-		};
-		localStorage.setItem("inventorySave.txt", inventorySave);
+		inventorySave.push(equippedWeapon);
+
+		localStorage.setItem("inventorySave.txt", JSON.stringify(inventorySave));
 	};
 };
 function clearSave() {
@@ -886,7 +856,6 @@ function updateInventory() {
 		//Add button for item to be used
 		let button = document.createElement('button');
 		let item = inventory[i]
-		button.innerHTML = "<b>"+item.name+"</b>";
 		button.value = i;
 		if (item.type === "weapon") {
 			console.log("weapon:",item);
@@ -897,17 +866,17 @@ function updateInventory() {
 				console.log(item.rarity);
 				button.style.background = "radial-gradient("+colorPalette[item.rarity].light+","+colorPalette[item.rarity].main+")";
 			}
-			button.innerHTML += "<br>Power: "+item.power+" "+getIcon(item.attackStat);
+			button.innerHTML += "<b>"+item.name+"</b>"+"<br>Power: "+item.power+" "+getIcon(item.attackStat);
 		} else if (item.type === "food") {
 			console.log("food",item)
 			if (item.spoil < 1) {
 				button.title = "Spoiled";
 				button.style.background = "#BBD7A0"; 
-				button.innerHTML += "<br>Spoiled";
+				button.innerHTML += getIcon("spoiled")+" <b>"+item.name+"</b>"+"<br>Spoiled";
 			} else {
 				button.title = "Heals: " + item.heals + " Uses: " + item.uses;
 				button.style.background = "#D7CC91"; 
-				button.innerHTML += "<br>Heals: "+item.heals+" Uses: "+item.uses;
+				button.innerHTML += getIcon("food")+" <b>"+item.name+"</b>"+"<br>Heals: "+item.heals+" Uses: "+item.uses;
 			};
 		} else if (item.type === "potion") {
 			button.style.background = "#C98FBE"; 
@@ -916,6 +885,8 @@ function updateInventory() {
 				return;
 			};
 			button.title = "Effect: " + item[2] + " " + statNames[item[5]] + "Uses: " + item[3];
+		} else {
+			button.innerHTML = "<b>"+item.name+"</b>";
 		};
 		button.onclick = function() {useItem(item, button.value)};
 		document.getElementById("inventory").appendChild(button);
@@ -1623,6 +1594,9 @@ function setCompass(direction) {
 
 //Merchant functions:
 function openMerchant() {
+	if (gameState instanceof Fighting) {
+		return;
+	}
 	openMerSound.play();
 	document.getElementById("merchantView").style.opacity = 1;
 	document.getElementById("merchantView").style.width = "400px";

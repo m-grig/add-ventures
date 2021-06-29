@@ -44,7 +44,8 @@ var gameItems = {
 		{name: "Dense Loaf",			level:3, heals:15,		uses:5,		value:37, 	spoil:1},
 		{name: "Shepherd's Pie",		level:3, heals:55,		uses:2,		value:55, 	spoil:1},
 		{name: "Leg of Mutton",			level:3, heals:75,		uses:1,		value:38, 	spoil:1},
-		{name: "Flask of Ointment",		level:3, heals:1000,	uses:7,		value:7000, 	spoil:1},
+		{name: "Gherkin",				level:3, heals:22,		uses:2,		value:30,	spoil:1},
+		{name: "Flask of Ointment",		level:3, heals:1000,	uses:7,		value:7000, spoil:1},
 		{name: "Fermented Rat",			level:3, heals:-45,		uses:1,		value:16, 	spoil:1}, //heavy stat boost
 		{name: "Manna",					level:3, heals:5,		uses:1000000000,value:50000,spoil:100}
 		],
