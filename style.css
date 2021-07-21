@@ -122,6 +122,7 @@
 		}
 
 		#location {
+			visibility: hidden;
 			float: right;
 		}
 		#sceneTitle {
@@ -178,7 +179,7 @@
 			margin-left: 40px;
 		}
 		#xpNow {
-			width: 50px;
+			width: 100px;
 		}
 		#money {
 			margin-bottom: 10px;
